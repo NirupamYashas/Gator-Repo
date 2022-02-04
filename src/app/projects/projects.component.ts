@@ -4,18 +4,13 @@ import {  Component } from '@angular/core';
 
 @Component({
     selector: 'projects',
-    template: `
-            <h2>{{ title }}</h2>
-            <ul>
-                <li *ngFor="let project of projects">
-                    {{ project }}
-                </li>
-            </ul>
-    `
+    templateUrl: './projects.component.html',
+    styleUrls: ['./projects.component.css']
 })
 export class ProjectsComponent {
     title = "List Of Projects";
     projects;
+    
 
     constructor(service: ProjectsService){
         this.projects = service.getProjects();
