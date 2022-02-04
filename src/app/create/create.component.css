@@ -1,0 +1,11 @@
+.input-field{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    margin: 30px;
+    align-items: stretch;
+}
+
+.form-group{
+    margin: 20px;
+}
