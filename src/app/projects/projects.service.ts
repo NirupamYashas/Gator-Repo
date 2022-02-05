@@ -2,11 +2,11 @@
 export class ProjectsService{
     getProjects(){
         return  [
-            { firstName: 'Frank', lastName: 'Murphy', email: 'frank.murphy@test.com', role: 'User' },
-            { firstName: 'Vic', lastName: 'Reynolds', email: 'vic.reynolds@test.com', role: 'Admin' },
-            { firstName: 'Gina', lastName: 'Jabowski', email: 'gina.jabowski@test.com', role: 'Admin' },
-            { firstName: 'Jessi', lastName: 'Glaser', email: 'jessi.glaser@test.com', role: 'User' },
-            { firstName: 'Jay', lastName: 'Bilzerian', email: 'jay.bilzerian@test.com', role: 'User' }
+            { projectName: 'abc',department:'Computer Science', email: 'frank.murphy@ufl.edu',githubLink: 'User' },
+            { projectName: 'def',department:'Electrical Engineering', email: 'vic.reynolds@ufl.edu', githubLink: 'User' },
+            { projectName: 'ghi',department:'Mechanical Engineering', email: 'gina.jabowski@ufl.edu', githubLink: 'User' },
+            { projectName: 'jkl',department:'Law', email: 'jessi.glaser@ufl.edu',githubLink: 'User' },
+            { projectName: 'mno',department:'Arts and Sciences', email: 'jay.bilzerian@ufl.edu',githubLink: 'User' }
         ];
     }
 }
