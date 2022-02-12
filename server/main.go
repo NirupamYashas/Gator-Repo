@@ -41,6 +41,7 @@ func (a *App) start() {
 
 	a.r.HandleFunc("/api/projects", a.getProjects).Methods("GET")
 	a.r.HandleFunc("/api/projects", a.addProject).Methods("POST")
+	a.r.HandleFunc("/api/projects", a.updateProject).Methods("PUT")
 
 	log.Fatal(http.ListenAndServe(":8080", a.r))
 }
@@ -73,12 +74,31 @@ func (a *App) addProject(w http.ResponseWriter, r *http.Request) {
 	}
 
 	project.ID = uuid.New().String()
-	err = a.db.Create(&project).Error
+	err = a.db.Save(&project).Error
 
 	if err != nil {
 		json.NewEncoder(w).Encode(err.Error())
 	} else {
 		w.WriteHeader(http.StatusCreated)
+	}
+}
+
+func (a *App) updateProject(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	err := json.NewDecoder(r.Body).Decode(&project)
+
+	if err != nil {
+		json.NewEncoder(w).Encode(err.Error())
+		return
+	}
+
+	err = a.db.Save(&project).Error
+
+	if err != nil {
+		json.NewEncoder(w).Encode(err.Error())
+	} else {
+		w.WriteHeader(http.StatusOK)
 	}
 }
 
