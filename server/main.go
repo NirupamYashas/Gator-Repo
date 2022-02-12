@@ -42,6 +42,7 @@ func (a *App) start() {
 	a.r.HandleFunc("/api/projects", a.getProjects).Methods("GET")
 	a.r.HandleFunc("/api/projects", a.addProject).Methods("POST")
 	a.r.HandleFunc("/api/projects", a.updateProject).Methods("PUT")
+	a.r.HandleFunc("/api/projects", a.deleteProject).Methods("DELETE")
 
 	log.Fatal(http.ListenAndServe(":8080", a.r))
 }
@@ -94,6 +95,25 @@ func (a *App) updateProject(w http.ResponseWriter, r *http.Request) {
 	}
 
 	err = a.db.Save(&project).Error
+
+	if err != nil {
+		json.NewEncoder(w).Encode(err.Error())
+	} else {
+		w.WriteHeader(http.StatusOK)
+	}
+}
+
+func (a *App) deleteProject(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	err := json.NewDecoder(r.Body).Decode(&project)
+
+	if err != nil {
+		json.NewEncoder(w).Encode(err.Error())
+		return
+	}
+
+	err = a.db.Unscoped().Delete(&project).Error
 
 	if err != nil {
 		json.NewEncoder(w).Encode(err.Error())
