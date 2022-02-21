@@ -43,6 +43,7 @@ func (a *App) start() {
 	a.r.HandleFunc("/api/projects", a.addProject).Methods("POST")
 	a.r.HandleFunc("/api/projects/{id}", a.updateProject).Methods("PUT")
 	a.r.HandleFunc("/api/projects/{id}", a.deleteProject).Methods("DELETE")
+	a.r.HandleFunc("/api/projects/{department}", a.getProjectsByDepartment).Methods("GET")
 
 	log.Fatal(http.ListenAndServe(":8080", a.r))
 }
@@ -118,6 +119,23 @@ func (a *App) deleteProject(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(err.Error())
 	} else {
 		w.WriteHeader(http.StatusOK)
+	}
+}
+
+func (a *App) getProjectsByDepartment(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	err := a.db.Find(&projects, "department = ?", mux.Vars(r)["department"]).Error
+
+	if err != nil {
+		json.NewEncoder(w).Encode(err.Error())
+		return
+	}
+
+	err = json.NewEncoder(w).Encode(projects)
+
+	if err != nil {
+		json.NewEncoder(w).Encode(err.Error())
 	}
 }
 
