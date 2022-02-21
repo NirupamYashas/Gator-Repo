@@ -1,37 +1,41 @@
 <div class="container">
-  <form class="input-field">
-    <div class="form-row">
-      <div class="form-group col-md-6">
-        <label for="inputName">Enter Project Name</label>
-        <input type="email" class="form-control" id="inputName" placeholder="Project Name">
+  <form class="input-field" [formGroup]="addProjectForm" (ngSubmit)="addProjectSubmit()">
+      <div class="form-row" >
+        <div class="form-group col-md-6">
+          <label for="inputName">Enter Project Name</label>
+          <input type="email" formControlName="project_name" class="form-control" id="inputName" placeholder="Project Name">
+        </div>
       </div>
-    </div>
-    <div class="form-row">
-      <div class="form-group col-md-4">
-        <label for="inputDepartment">Select Department</label>
-        <select id="inputDepartment" class="form-control">
-          <option selected>choose...</option>
-          <option>Computer Science Engineering</option>
-          <option>Electrical Engineering</option>
-          <option>Mechanical Engineering</option>
-          <option>Law</option>
-          <option>Arts and Sciences</option>
-        </select>
+
+      <div class="form-row">
+        <div class="form-group col-md-4">
+          <label for="inputDepartment">Select Department</label>
+          <select id="inputDepartment" formControlName="department_name" class="form-control">
+            <option selected>choose...</option>
+            <option>Computer Science Engineering</option>
+            <option>Electrical Engineering</option>
+            <option>Mechanical Engineering</option>
+            <option>Law</option>
+            <option>Arts and Sciences</option>
+          </select>
+        </div>
       </div>
-    </div>
-    <div class="form-row">
-      <div class="form-group col-md-6">
-        <label for="inputName">Enter UF mail-id</label>
-        <input type="email" class="form-control" id="inputEmail" placeholder="UF Mail">
+
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="inputName">Enter UF mail-id</label>
+          <input type="email" formControlName="uf_mail" class="form-control" id="inputEmail" placeholder="UF Mail">
+        </div>
       </div>
-    </div>
-    <div class="form-row">
-      <div class="form-group col-md-6">
-        <label for="inputName">Enter Github Link</label>
-        <input type="email" class="form-control" id="inputLink" placeholder="Github Link">
+
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="inputName">Enter Github Link</label>
+          <input type="email" formControlName="github_link" class="form-control" id="inputLink" placeholder="Github Link">
+        </div>
       </div>
-    </div>
-    <button type="submit" class="btn btn-primary" routerLink="">Create Project</button>
+
+      <button type="submit" class="btn btn-primary" (click)="addProjectSubmit()" routerLink="">Create Project</button>
   </form>
 </div>
 
