@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup ,Validators } from '@angular/forms';
+import { ProjectsService } from '../projects/projects.service';
 
 @Component({
   selector: 'app-create',
@@ -11,8 +12,9 @@ export class CreateComponent implements OnInit {
 
   addProjectForm! : FormGroup; 
 
-  constructor(private http: HttpClient) { }
+  constructor(public projectsService: ProjectsService) { }
 
+  msgTrue = false;
   ngOnInit(): void {
 
     this.addProjectForm = new FormGroup({
@@ -23,14 +25,13 @@ export class CreateComponent implements OnInit {
     })
   }
 
-  addProjectSubmit(): void{
+  addProjectSubmit(){
      var projectName = this.addProjectForm.getRawValue().project_name;
      var departmentName = this.addProjectForm.getRawValue().department_name;
      var ufMail = this.addProjectForm.getRawValue().uf_mail;
      var githubLink = this.addProjectForm.getRawValue().github_link;
-     console.log(this.addProjectForm.getRawValue())
-     this.http.post<any>('http://localhost:8080/api/projects/', { name: projectName, department: departmentName,
-                          email: ufMail , link: githubLink }).subscribe(data => { })
+     const newFormData = { name: projectName, department: departmentName, email: ufMail , link: githubLink };
+     this.projectsService.createProject(newFormData).subscribe(data => {})
   }
 
 }

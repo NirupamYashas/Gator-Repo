@@ -2,12 +2,14 @@ package main
 
 import (
 	"encoding/json"
+	// "fmt"
 	"log"
 	"net/http"
 
 	// "strconv"
 
 	"github.com/google/uuid"
+	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
@@ -30,6 +32,27 @@ var app App
 var projects []Project
 var project Project
 
+func CORS(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+
+		// Set headers
+		w.Header().Set("Access-Control-Allow-Headers:", "*")
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "*")
+
+		if r.Method == "OPTIONS" {
+			w.WriteHeader(http.StatusOK)
+			return
+		}
+
+		// fmt.Println("ok")
+
+		// Next
+		next.ServeHTTP(w, r)
+		return
+	})
+}
+
 func (a *App) start() {
 	a.db.AutoMigrate(&Project{})
 
@@ -45,7 +68,12 @@ func (a *App) start() {
 	a.r.HandleFunc("/api/projects/{id}", a.deleteProject).Methods("DELETE")
 	a.r.HandleFunc("/api/projects/{department}", a.getProjectsByDepartment).Methods("GET")
 
-	log.Fatal(http.ListenAndServe(":8080", a.r))
+	// log.Fatal(http.ListenAndServe(":8080", a.r))
+	log.Fatal(http.ListenAndServe(
+		":8080",
+		handlers.CORS(handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization"}),
+			handlers.AllowedMethods([]string{"*"}),
+			handlers.AllowedOrigins([]string{"*"}))(a.r)))
 }
 
 func (a *App) getProjects(w http.ResponseWriter, r *http.Request) {
@@ -67,6 +95,8 @@ func (a *App) getProjects(w http.ResponseWriter, r *http.Request) {
 
 func (a *App) addProject(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
+
+	// fmt.Println(r.Body)
 
 	err := json.NewDecoder(r.Body).Decode(&project)
 

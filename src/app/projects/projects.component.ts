@@ -1,6 +1,6 @@
 import { ProjectsService } from './projects.service';
 
-import {  Component } from '@angular/core';
+import {  Component , OnInit} from '@angular/core';
 
 @Component({
     selector: 'projects',
@@ -9,10 +9,17 @@ import {  Component } from '@angular/core';
 })
 export class ProjectsComponent {
     title = "List Of Projects";
-    projects;
     
+    constructor(public service: ProjectsService){}
+    
+    projects: any;
+    ngOnInit(): void{
+        //this.projects = this.service.getProjects();
+        
 
-    constructor(service: ProjectsService){
-        this.projects = service.getProjects();
+        this.service.getProjects().subscribe(data => {
+            this.projects = data;
+        })
     }
+   
 }

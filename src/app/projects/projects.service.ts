@@ -1,12 +1,30 @@
+import { Injectable } from "@angular/core";
+import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 
+
+@Injectable({
+    providedIn: 'root'
+})
 export class ProjectsService{
+
+    constructor(private httpclient: HttpClient){}
+
     getProjects(){
-        return  [
-            { projectName: 'abc',department:'Computer Science', email: 'frank.murphy@ufl.edu',githubLink: 'User' },
-            { projectName: 'def',department:'Electrical Engineering', email: 'vic.reynolds@ufl.edu', githubLink: 'User' },
-            { projectName: 'ghi',department:'Mechanical Engineering', email: 'gina.jabowski@ufl.edu', githubLink: 'User' },
-            { projectName: 'jkl',department:'Law', email: 'jessi.glaser@ufl.edu',githubLink: 'User' },
-            { projectName: 'mno',department:'Arts and Sciences', email: 'jay.bilzerian@ufl.edu',githubLink: 'User' }
-        ];
+
+        //Headers
+        const httpHeaders = new HttpHeaders();
+        httpHeaders.append('content-type','application/json')
+
+        //Get the HTTP Method working for you
+        return  this.httpclient.get('http://localhost:8080/api/projects', {headers: httpHeaders});
+
+    }
+
+    createProject(createResource: any){
+        //Headers
+        const httpHeaders = new HttpHeaders();
+        httpHeaders.append('content-type','application/json')
+
+        return this.httpclient.post("http://localhost:8080/api/projects", createResource, {headers: httpHeaders});
     }
 }
