@@ -311,19 +311,16 @@
     src="./assets/florida-gators-logo-png-transparent.png"
   />
   <span>GatorRepo</span>
-    <div class="spacer"></div>
+  <div class="spacer"></div>
 </div>
 
 <div class="nav">
   <!--Navbar-->
-  <app-navbar></app-navbar>
+  <app-navbar *ngIf="removeNavbar()"></app-navbar>
 </div>
 
 
-<div class="content" role="main">
-  
-  <!-- <projects></projects> -->
-
-</div>
+<!-- <div class="content" role="main">
+</div> -->
 
 <router-outlet></router-outlet>

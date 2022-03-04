@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { LocationStrategy, PlatformLocation, Location } from '@angular/common';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,20 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'Gator-Repo';
+
+  constructor(public location: Location){
+
+  }
+
+  removeNavbar() {
+    var title = this.location.prepareExternalUrl(this.location.path());
+    title = title.slice( 1 );
+    // console.log(title);
+    if(title === 'register'){
+        return false;
+    }
+    else {
+        return true;
+    }
+}
 }

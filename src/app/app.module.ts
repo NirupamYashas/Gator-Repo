@@ -12,13 +12,19 @@ import { CreateComponent } from './create/create.component';
 import { AvailableRoutes } from './app.routing';
 import { NavbarComponent } from './navbar/navbar.component';
 import {MatListModule} from '@angular/material/list';
+import { LoginComponent } from './login/login.component';
+import { RegisterComponent } from './register/register.component';
+import { HomepageComponent } from './homepage/homepage.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ProjectsComponent,
     CreateComponent,
-    NavbarComponent
+    NavbarComponent,
+    LoginComponent,
+    RegisterComponent,
+    HomepageComponent
   ],
   imports: [
     HttpClientModule,
