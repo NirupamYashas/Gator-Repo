@@ -37,6 +37,10 @@
     margin: 10px 0;
 }
 
+.register-form > button{
+    border-radius: 20px;
+}
+
 .input-row label{
     font-size: 15px;
 }
