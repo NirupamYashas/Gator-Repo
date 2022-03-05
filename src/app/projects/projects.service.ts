@@ -20,6 +20,17 @@ export class ProjectsService{
 
     }
 
+    getProjectsByDepartment(department: any){
+
+        //Headers
+        const httpHeaders = new HttpHeaders();
+        httpHeaders.append('content-type','application/json')
+
+        //Get the HTTP Method working for you
+        return  this.httpclient.get('http://localhost:8080/api/projects/departments/'+department, {headers: httpHeaders});
+
+    }
+
     createProject(createResource: any){
         //Headers
         const httpHeaders = new HttpHeaders();
