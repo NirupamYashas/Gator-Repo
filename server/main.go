@@ -2,11 +2,10 @@ package main
 
 import (
 	"encoding/json"
-	"strings"
-
-	// "fmt"
+	"fmt"
 	"log"
 	"net/http"
+	"strings"
 
 	// "strconv"
 
@@ -89,6 +88,8 @@ func (a *App) getProjects(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		json.NewEncoder(w).Encode(err.Error())
 	}
+
+	fmt.Println("hi")
 }
 
 func (a *App) addProject(w http.ResponseWriter, r *http.Request) {
