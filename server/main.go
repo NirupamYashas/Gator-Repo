@@ -49,24 +49,25 @@ func CORS(next http.Handler) http.Handler {
 
 		// Next
 		next.ServeHTTP(w, r)
-		return
+		// return
 	})
 }
 
 func (a *App) start() {
 	a.db.AutoMigrate(&Project{})
 
-	project = Project{ID: uuid.New().String(), Name: "Game Project", Department: "CISE", Email: "game@gmail.com", Link: "github.com/game"}
-	a.db.Create(&project)
+	// project = Project{ID: uuid.New().String(), Name: "Game Project", Department: "CISE", Email: "game@gmail.com", Link: "github.com/game"}
+	// a.db.Create(&project)
 
-	project = Project{ID: uuid.New().String(), Name: "ML Project", Department: "CISE", Email: "ml@gmail.com", Link: "github.com/ml"}
-	a.db.Create(&project)
+	// project = Project{ID: uuid.New().String(), Name: "ML Project", Department: "CISE", Email: "ml@gmail.com", Link: "github.com/ml"}
+	// a.db.Create(&project)
 
 	a.r.HandleFunc("/api/projects", a.getProjects).Methods("GET")
 	a.r.HandleFunc("/api/projects", a.addProject).Methods("POST")
 	a.r.HandleFunc("/api/projects/{id}", a.updateProject).Methods("PUT")
 	a.r.HandleFunc("/api/projects/{id}", a.deleteProject).Methods("DELETE")
-	a.r.HandleFunc("/api/projects/{department}", a.getProjectsByDepartment).Methods("GET")
+	a.r.HandleFunc("/api/projects/departments/{department}", a.getProjectsByDepartment).Methods("GET")
+	a.r.HandleFunc("/api/projects/search/{search_phrase}", a.getProjectsBySearch).Methods("GET")
 
 	// log.Fatal(http.ListenAndServe(":8080", a.r))
 	log.Fatal(http.ListenAndServe(
@@ -153,6 +154,23 @@ func (a *App) deleteProject(w http.ResponseWriter, r *http.Request) {
 }
 
 func (a *App) getProjectsByDepartment(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	err := a.db.Find(&projects, "department = ?", mux.Vars(r)["department"]).Error
+
+	if err != nil {
+		json.NewEncoder(w).Encode(err.Error())
+		return
+	}
+
+	err = json.NewEncoder(w).Encode(projects)
+
+	if err != nil {
+		json.NewEncoder(w).Encode(err.Error())
+	}
+}
+
+func (a *App) getProjectsBySearch(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	err := a.db.Find(&projects, "department = ?", mux.Vars(r)["department"]).Error
