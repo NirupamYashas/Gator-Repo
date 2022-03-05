@@ -9,25 +9,18 @@ export class ProjectsService{
 
     constructor(private httpclient: HttpClient){}
 
-    getProjects(){
+    getProjects(department?:any){
 
         //Headers
         const httpHeaders = new HttpHeaders();
         httpHeaders.append('content-type','application/json')
 
-        //Get the HTTP Method working for you
-        return  this.httpclient.get('http://localhost:8080/api/projects', {headers: httpHeaders});
-
-    }
-
-    getProjectsByDepartment(department: any){
-
-        //Headers
-        const httpHeaders = new HttpHeaders();
-        httpHeaders.append('content-type','application/json')
-
-        //Get the HTTP Method working for you
-        return  this.httpclient.get('http://localhost:8080/api/projects/departments/'+department, {headers: httpHeaders});
+        // if(department === null){
+            //Get the HTTP Method working for you
+            return  this.httpclient.get('http://localhost:8080/api/projects', {headers: httpHeaders});
+        // }else{
+        //     return  this.httpclient.get('http://localhost:8080/api/projects/departments/'+department, {headers: httpHeaders});
+        // }  
 
     }
 

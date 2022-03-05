@@ -25,14 +25,14 @@
    background-attachment: fixed;
 }
 
-.register-form{
+.login-form{
     display: flex;
     flex-direction: column;
     margin-top: 30px;
     align-items: stretch;
 }
 
-.register-form > div {
+.login-form > div {
     margin: 10px 0;
 }
 
@@ -57,7 +57,7 @@
     padding: 5px;
 }
 
-.register-form > button {
+.login-form > button {
     margin-top: 20px;
     border-radius: 20px;
 }

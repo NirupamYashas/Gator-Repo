@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ProjectsService } from '../projects/projects.service';
+import { ProjectsComponent } from '../projects/projects.component';
+
 
 @Component({
   selector: 'app-navbar',
@@ -11,19 +12,16 @@ export class NavbarComponent implements OnInit {
   selectedValue: string = '';
   projects: any;
 
+  // constructor(public service: ProjectsComponent) { }
+
   //event handler for the select element's change event
   selectChangeHandler (event: any) {
     //update the ui
     this.selectedValue = event.target.value;
+    // this.service.refreshProjects(this.selectedValue);
   }
 
-  constructor(public service: ProjectsService) { }
-
   ngOnInit(): void {
-
-    this.service.getProjectsByDepartment(this.selectedValue).subscribe(data => {
-      this.projects = data;
-  })
   }
 
 }

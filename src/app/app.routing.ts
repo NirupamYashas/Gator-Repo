@@ -5,7 +5,8 @@ import { RegisterComponent } from "./register/register.component";
 import { LoginComponent } from "./login/login.component";
 
 export const AvailableRoutes: any = [
-    { path: "", component: ProjectsComponent},
+    { path: "", component: HomepageComponent},
+    { path: "projects", component: ProjectsComponent},
     { path: "create", component: CreateComponent },
     { path: "homepage", component: HomepageComponent},
     { path: "register", component: RegisterComponent},
