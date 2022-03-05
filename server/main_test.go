@@ -13,7 +13,7 @@ import (
 )
 
 func initApp() App {
-	db, _ := gorm.Open(sqlite.Open("gator-repo-testing.db"), &gorm.Config{})
+	db, _ := gorm.Open(sqlite.Open("testing.db"), &gorm.Config{})
 	db.AutoMigrate(&Project{})
 	return App{db: db}
 }
