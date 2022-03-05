@@ -2,6 +2,8 @@ package main
 
 import (
 	"encoding/json"
+	"strings"
+
 	// "fmt"
 	"log"
 	"net/http"
@@ -35,7 +37,6 @@ var project Project
 func CORS(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
-		// Set headers
 		w.Header().Set("Access-Control-Allow-Headers:", "*")
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 		w.Header().Set("Access-Control-Allow-Methods", "*")
@@ -45,11 +46,7 @@ func CORS(next http.Handler) http.Handler {
 			return
 		}
 
-		// fmt.Println("ok")
-
-		// Next
 		next.ServeHTTP(w, r)
-		// return
 	})
 }
 
@@ -96,8 +93,6 @@ func (a *App) getProjects(w http.ResponseWriter, r *http.Request) {
 
 func (a *App) addProject(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-
-	// fmt.Println(r.Body)
 
 	err := json.NewDecoder(r.Body).Decode(&project)
 
@@ -173,7 +168,15 @@ func (a *App) getProjectsByDepartment(w http.ResponseWriter, r *http.Request) {
 func (a *App) getProjectsBySearch(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
-	err := a.db.Find(&projects, "department = ?", mux.Vars(r)["department"]).Error
+	res := strings.Split(mux.Vars(r)["search_phrase"], " ")
+	tx := a.db
+
+	for _, element := range res {
+		search_term := "%" + element + "%"
+		tx = tx.Where("name LIKE ? OR email LIKE ?", search_term, search_term)
+	}
+
+	err := tx.Find(&projects).Error
 
 	if err != nil {
 		json.NewEncoder(w).Encode(err.Error())
