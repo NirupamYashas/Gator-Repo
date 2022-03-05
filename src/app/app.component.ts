@@ -17,7 +17,7 @@ export class AppComponent {
     var title = this.location.prepareExternalUrl(this.location.path());
     title = title.slice( 1 );
     // console.log(title);
-    if(title === 'register' || title === 'login' || 'homepage'){
+    if(title === 'register' || title === 'login' || title === 'homepage'){
         return false;
     }
     else {
