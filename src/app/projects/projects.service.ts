@@ -9,7 +9,7 @@ export class ProjectsService{
 
     constructor(private httpclient: HttpClient){}
 
-    getProjects(department?:any){
+    getProjects(){
 
         //Headers
         const httpHeaders = new HttpHeaders();

@@ -31,6 +31,7 @@ export class CreateComponent implements OnInit {
      var ufMail = this.addProjectForm.getRawValue().uf_mail;
      var githubLink = this.addProjectForm.getRawValue().github_link;
      const newFormData = { name: projectName, department: departmentName, email: ufMail , link: githubLink };
+     console.log(newFormData);
      this.projectsService.createProject(newFormData).subscribe(data => {})
   }
 
