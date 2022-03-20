@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
 	"strings"
@@ -10,7 +9,6 @@ import (
 	// "strconv"
 
 	"github.com/google/uuid"
-	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
@@ -33,21 +31,10 @@ var app App
 var projects []Project
 var project Project
 
-func CORS(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-
-		w.Header().Set("Access-Control-Allow-Headers:", "*")
-		w.Header().Set("Access-Control-Allow-Origin", "*")
-		w.Header().Set("Access-Control-Allow-Methods", "*")
-
-		if r.Method == "OPTIONS" {
-			w.WriteHeader(http.StatusOK)
-			return
-		}
-
-		next.ServeHTTP(w, r)
-		return
-	})
+func setupCorsResponse(w *http.ResponseWriter, req *http.Request) {
+	(*w).Header().Set("Access-Control-Allow-Origin", "*")
+	(*w).Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+	(*w).Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Authorization")
 }
 
 func (a *App) start() {
@@ -59,22 +46,22 @@ func (a *App) start() {
 	// project = Project{ID: uuid.New().String(), Name: "ML Project", Department: "CISE", Email: "ml@gmail.com", Link: "github.com/ml"}
 	// a.db.Create(&project)
 
-	a.r.HandleFunc("/api/projects", a.getProjects).Methods("GET")
-	a.r.HandleFunc("/api/projects", a.addProject).Methods("POST")
-	a.r.HandleFunc("/api/projects/{id}", a.updateProject).Methods("PUT")
-	a.r.HandleFunc("/api/projects/{id}", a.deleteProject).Methods("DELETE")
-	a.r.HandleFunc("/api/projects/departments/{department}", a.getProjectsByDepartment).Methods("GET")
-	a.r.HandleFunc("/api/projects/search/{search_phrase}", a.getProjectsBySearch).Methods("GET")
+	a.r.HandleFunc("/api/projects", a.getProjects).Methods("GET", "OPTIONS")
+	a.r.HandleFunc("/api/projects", a.addProject).Methods("POST", "OPTIONS")
+	a.r.HandleFunc("/api/projects/{id}", a.updateProject).Methods("PUT", "OPTIONS")
+	a.r.HandleFunc("/api/projects/{id}", a.deleteProject).Methods("DELETE", "OPTIONS")
+	a.r.HandleFunc("/api/projects/departments/{department}", a.getProjectsByDepartment).Methods("GET", "OPTIONS")
+	a.r.HandleFunc("/api/projects/search/{search_phrase}", a.getProjectsBySearch).Methods("GET", "OPTIONS")
 
-	// log.Fatal(http.ListenAndServe(":8080", a.r))
-	log.Fatal(http.ListenAndServe(
-		":8080",
-		handlers.CORS(handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization"}),
-			handlers.AllowedMethods([]string{"*"}),
-			handlers.AllowedOrigins([]string{"*"}))(a.r)))
+	log.Fatal(http.ListenAndServe(":8080", a.r))
 }
 
 func (a *App) getProjects(w http.ResponseWriter, r *http.Request) {
+	setupCorsResponse(&w, r)
+	if (*r).Method == "OPTIONS" {
+		return
+	}
+
 	w.Header().Set("Content-Type", "application/json")
 
 	err := a.db.Find(&projects).Error
@@ -89,11 +76,14 @@ func (a *App) getProjects(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		json.NewEncoder(w).Encode(err.Error())
 	}
-
-	fmt.Println("hi")
 }
 
 func (a *App) addProject(w http.ResponseWriter, r *http.Request) {
+	setupCorsResponse(&w, r)
+	if (*r).Method == "OPTIONS" {
+		return
+	}
+
 	w.Header().Set("Content-Type", "application/json")
 
 	err := json.NewDecoder(r.Body).Decode(&project)
@@ -114,6 +104,11 @@ func (a *App) addProject(w http.ResponseWriter, r *http.Request) {
 }
 
 func (a *App) updateProject(w http.ResponseWriter, r *http.Request) {
+	setupCorsResponse(&w, r)
+	if (*r).Method == "OPTIONS" {
+		return
+	}
+
 	w.Header().Set("Content-Type", "application/json")
 
 	err := json.NewDecoder(r.Body).Decode(&project)
@@ -140,7 +135,13 @@ func (a *App) updateProject(w http.ResponseWriter, r *http.Request) {
 }
 
 func (a *App) deleteProject(w http.ResponseWriter, r *http.Request) {
+	setupCorsResponse(&w, r)
+	if (*r).Method == "OPTIONS" {
+		return
+	}
+
 	w.Header().Set("Content-Type", "application/json")
+
 	err := a.db.Unscoped().Delete(&Project{ID: mux.Vars(r)["id"]}).Error
 
 	if err != nil {
@@ -151,6 +152,11 @@ func (a *App) deleteProject(w http.ResponseWriter, r *http.Request) {
 }
 
 func (a *App) getProjectsByDepartment(w http.ResponseWriter, r *http.Request) {
+	setupCorsResponse(&w, r)
+	if (*r).Method == "OPTIONS" {
+		return
+	}
+
 	w.Header().Set("Content-Type", "application/json")
 
 	err := a.db.Find(&projects, "department = ?", mux.Vars(r)["department"]).Error
@@ -168,6 +174,11 @@ func (a *App) getProjectsByDepartment(w http.ResponseWriter, r *http.Request) {
 }
 
 func (a *App) getProjectsBySearch(w http.ResponseWriter, r *http.Request) {
+	setupCorsResponse(&w, r)
+	if (*r).Method == "OPTIONS" {
+		return
+	}
+
 	w.Header().Set("Content-Type", "application/json")
 
 	res := strings.Split(mux.Vars(r)["search_phrase"], " ")
