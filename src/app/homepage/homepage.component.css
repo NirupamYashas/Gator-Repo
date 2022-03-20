@@ -1,6 +1,6 @@
 .page-header{
-    min-height: 100%;
-    background-image: url(/assets/img/antoine-barres.jpg);
+    min-height: 85%;
+    background-image: url(/assets/img/homepage-bg.gif);
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
@@ -13,4 +13,81 @@
     /* margin-top: 10px; */
     justify-content: center;
     align-items: center;
+    font-size: 120px;
+    font-weight: bold;
+    font-family: 'Courier New', Courier, monospace;
 }
+
+.container2{
+    display: flex;
+    flex-direction: column;
+    height: 800px;
+    justify-content: center;
+    font-size: large;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.container3{
+    display: flex;
+    flex-direction: column;
+    height: 700px;
+    background-color: black;
+    text-decoration-color: white;
+    color: white;
+    justify-content: center;
+    font-size: large;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.container4{
+    display: flex;
+    flex-direction: column;
+    height: 600px;
+    justify-content: center;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.row{
+    justify-content: center;
+    margin: 20px;
+}
+
+.nc-icon{
+    font-size: 50px; 
+    color: #f5593d; 
+    margin-bottom: 20px; 
+}
+
+.btn-link{
+    color:#f5593d;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: bolder;
+    font-variant:normal;
+}
+
+p{
+    margin: 30px;
+}
+
+.details{
+    color: white;
+    background-color: #f5593d;
+    border-radius: 98px;
+}
+
+.faces{
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+}
+.card{
+    background-color: black;
+}
+
+.motto{
+    display: flex;
+    flex-direction: column;
+}
+
+
