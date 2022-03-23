@@ -5,6 +5,7 @@ describe('Login component', () => {
     cy.get('[formControlName="useremail"]').type('Robinhood@gmail.com')
     cy.get('button').should('be.disabled');
     cy.url().should('not.include','projects');
+    cy.screenshot();
   });
 
   it('should Login if the form is valid because entries are validated correctly', () => {
@@ -12,7 +13,8 @@ describe('Login component', () => {
     cy.url().should('includes','login')
     cy.get('[formControlName="useremail"]').type('Robinhood@gmail.com')
     cy.get('[formControlName="password"]').type('sr3sr3sr3')
-    cy.get('button').click();
+    cy.get('#login-button').click();
     cy.url().should('include','projects');
+    cy.screenshot();
   });
 })
