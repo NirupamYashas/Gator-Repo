@@ -1,0 +1,30 @@
+<!-- Toolbar -->
+<div class="toolbar" role="banner">
+    <img
+      width="40"
+      alt="Angular Logo"
+      src="./assets/florida-gators-logo-png-transparent.png"
+    />
+    <a href="/" class="home-route">GatorRepo</a>
+    <div class="spacer"></div>
+    <div>
+      <ul class="tools" style="list-style: none;">
+          <li class="tool tool1">
+              <a class="nav-link" title="Star on GitHub" href="https://github.com/NirupamYashas/Gator-Repo">
+                  <i class="fa fa-github"></i>
+              </a>
+          </li>
+          <li class="tool tool1">
+            <a [routerLink]="['/home']" class="nav-link"><i class="fa-brands fa-youtube"></i></a>
+          </li>
+          <li class="tool tool2">
+              <a href="" class="nav-link" target="_blank"><i class="nc-icon nc-book-bookmark"></i> Documentation</a>
+          </li>
+          <li class="tool tool3">
+              <a [routerLink]="['/home']" class="nav-link"><i class="nc-icon nc-layout-11"></i> Blog</a>
+          </li>
+          <button [routerLink]="['/login']" class="btn btn-warning lr" type="submit">Login</button>
+          <button [routerLink]="['/register']" class="btn btn-warning lr" type="submit">Sign-up</button>
+      </ul>
+    </div>
+</div>

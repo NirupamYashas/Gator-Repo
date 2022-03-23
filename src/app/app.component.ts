@@ -15,13 +15,13 @@ export class AppComponent {
 
   removeNavbar() {
     var title = this.location.prepareExternalUrl(this.location.path());
-    title = title.slice( 1 );
-    // console.log(title);
-    if(title === 'register' || title === 'login' || title === 'homepage'){
-        return false;
-    }
-    else {
+    title = title.slice(1);
+    console.log(title);
+    if(title === 'projects'){
         return true;
     }
-}
+    else {
+        return false;
+    }
+  }
 }
