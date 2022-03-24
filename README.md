@@ -16,9 +16,9 @@ Gator Repo is a web application that can be used to maintain all the projects do
 
 ### Team Members
 
-- Jagan Mohan Reddy Dwarampudi - [Links]jdwarampudi@ufl.edu - Backend Developer
-- Satya Venkata Sai Nirupam Yashas Kuchimanchi - [Links]kuchimanchi.s@ufl.edu - Frontend        Developer
-- Praveen Ravula - [Links]praveenravula@ufl.edu - Software Tester and Full Stack
+- Jagan Mohan Reddy Dwarampudi - jdwarampudi@ufl.edu - Backend Developer
+- Satya Venkata Sai Nirupam Yashas Kuchimanchi - kuchimanchi.s@ufl.edu - Frontend Developer
+- Praveen Ravula - praveenravula@ufl.edu - Software Tester and Full Stack
 
 ### Technology Stack:
 - Front-end: Angular, TypeScript
