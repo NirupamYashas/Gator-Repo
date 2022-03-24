@@ -1,17 +1,29 @@
 # Gator-Repo
 
+### Project Idea:
+
 Gator Repo is a web application that can be used to maintain all the projects done by students at UF. It offers additional features for professors and other students to verify projects and also allows the contributors to add their project updates.
 
-### Stack Used
+### Features:
 
-- Golang
-- Angular
+- List out all your projects
+- View Projects
+   + Filter By Department
+   + Search By project name
+   + Search By email
+- check out your UF peers' projects 
+- Rate your peers' projects 
 
 ### Team Members
 
-- Praveen Ravula
-- Jagan Mohan Reddy Dwarampudi
-- Satya Venkata Sai Nirupam Yashas Kuchimanchi
+- Jagan Mohan Reddy Dwarampudi - [Links]jdwarampudi@ufl.edu - Backend Developer
+- Satya Venkata Sai Nirupam Yashas Kuchimanchi - [Links]kuchimanchi.s@ufl.edu - Frontend        Developer
+- Praveen Ravula - [Links]praveenravula@ufl.edu - Software Tester and Full Stack
+
+### Technology Stack:
+- Front-end: Angular, TypeScript
+- Database: SQLite
+- Back-end: GOlang
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.2.2.
 
