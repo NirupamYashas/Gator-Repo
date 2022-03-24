@@ -18,6 +18,7 @@ import { RegisterComponent } from './register/register.component';
 import { HomepageComponent } from './homepage/homepage.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { AddprojectSuccessComponent } from './addproject-success/addproject-success.component';
+import { MyProjectsComponent } from './my-projects/my-projects.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { AddprojectSuccessComponent } from './addproject-success/addproject-succ
     HomepageComponent,
     ToolbarComponent,
     AddprojectSuccessComponent,
+    MyProjectsComponent,
   ],
   imports: [
     NgbModule,
