@@ -20,6 +20,7 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
 import { AddprojectSuccessComponent } from './addproject-success/addproject-success.component';
 import { MyProjectsComponent } from './my-projects/my-projects.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
+import { ProjectDescriptionComponent } from './project-description/project-description.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { UserProfileComponent } from './user-profile/user-profile.component';
     AddprojectSuccessComponent,
     MyProjectsComponent,
     UserProfileComponent,
+    ProjectDescriptionComponent,
   ],
   imports: [
     NgbModule,
