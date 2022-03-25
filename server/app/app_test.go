@@ -18,7 +18,21 @@ import (
 		return App{DB: db}
 	}
 	
+	func TestGetProjects(t *testing.T) {
+		app := initApp()
+		proj := Project{ID: uuid.New().String(), Name: "Game Project", Department: "CISE", Email: "game@gmail.com", Link: "github.com/game"}
+		app.DB.Table("projects").Save(proj)
 	
+		req, _ := http.NewRequest("GET", "/api/projects", nil)
+		r := httptest.NewRecorder()
+		handler := http.HandlerFunc(app.getProjects)
+	
+		handler.ServeHTTP(r, req)
+	
+		checkStatusCode(r.Code, http.StatusOK, t)
+		checkContentType(r, t)
+		checkBody(r.Body, proj, t)
+	}
 	
 	func checkStatusCode(code int, want int, t *testing.T) {
 		if code != want {
