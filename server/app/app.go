@@ -25,6 +25,14 @@ type Project struct {
 	Link       string `json:"link"`
 }
 
+type User struct {
+	ID        string `gorm:"primaryKey" json:"id"`
+	Firstname string `json:"firstname"`
+	Lastname  string `json:"lastname"`
+	Email     string `json:"email"`
+	Password  string `json:"password"`
+}
+
 func setupCorsResponse(w *http.ResponseWriter, req *http.Request) {
 	(*w).Header().Set("Access-Control-Allow-Origin", "*")
 	(*w).Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
@@ -32,13 +40,24 @@ func setupCorsResponse(w *http.ResponseWriter, req *http.Request) {
 }
 
 func (a *App) Start() {
+	a.DB.AutoMigrate(&User{})
 	a.DB.AutoMigrate(&Project{})
 
-	// project = Project{ID: uuid.New().String(), Name: "Game Project", Department: "CISE", Email: "game@gmail.com", Link: "github.com/game"}
-	// a.db.Create(&project)
+	// var user User = User{ID: uuid.New().String(), Firstname: "Jagan", Lastname: "Dwarampudi", Email: "scientistjagan2000@gmail.com", Password: "password"}
+	// a.DB.Table("users").Create(&user)
+
+	// var user User
+	// a.DB.Table("users").Where("email = ?", "nirupamyashas@gmail.com").First(&user)
+	// a.DB.Table("users").Delete(&user)
+
+	// var project Project = Project{ID: uuid.New().String(), Name: "Game Project", Department: "CISE", Email: "game@gmail.com", Link: "github.com/game"}
+	// a.db.Table("projects").Create(&project)
 
 	// project = Project{ID: uuid.New().String(), Name: "ML Project", Department: "CISE", Email: "ml@gmail.com", Link: "github.com/ml"}
-	// a.db.Create(&project)
+	// a.db.Table("projects").Create(&project)
+
+	a.R.HandleFunc("/api/users/signup", a.signupUser).Methods("POST", "OPTIONS")
+	a.R.HandleFunc("/api/users/login", a.loginUser).Methods("POST", "OPTIONS")
 
 	a.R.HandleFunc("/api/projects", a.getProjects).Methods("GET", "OPTIONS")
 	a.R.HandleFunc("/api/projects", a.addProject).Methods("POST", "OPTIONS")
@@ -50,6 +69,80 @@ func (a *App) Start() {
 	log.Fatal(http.ListenAndServe(":8080", a.R))
 }
 
+func (a *App) signupUser(w http.ResponseWriter, r *http.Request) {
+	setupCorsResponse(&w, r)
+	if (*r).Method == "OPTIONS" {
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+
+	var user User
+	err := json.NewDecoder(r.Body).Decode(&user)
+
+	if err != nil {
+		json.NewEncoder(w).Encode(err.Error())
+		return
+	}
+
+	err = a.DB.Table("users").Where("email = ? AND password = ?", user.Email, user.Password).First(&user).Error
+
+	if err == gorm.ErrRecordNotFound {
+		if user.Firstname == "" || user.Lastname == "" {
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
+
+		user.ID = uuid.New().String()
+		err = a.DB.Table("users").Save(&user).Error
+
+		if err != gorm.ErrRecordNotFound {
+			json.NewEncoder(w).Encode(err.Error())
+			return
+		}
+
+		w.WriteHeader(http.StatusCreated)
+		return
+	}
+
+	w.WriteHeader(http.StatusBadRequest)
+}
+
+func (a *App) loginUser(w http.ResponseWriter, r *http.Request) {
+	setupCorsResponse(&w, r)
+	if (*r).Method == "OPTIONS" {
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+
+	var user User
+	err := json.NewDecoder(r.Body).Decode(&user)
+
+	if err != nil {
+		json.NewEncoder(w).Encode(err.Error())
+		return
+	}
+
+	err = a.DB.Table("users").Where("email = ? AND password = ?", user.Email, user.Password).First(&user).Error
+
+	if err == gorm.ErrRecordNotFound {
+		w.WriteHeader(http.StatusNotFound)
+		return
+	} else if err != nil {
+		json.NewEncoder(w).Encode(err.Error())
+		return
+	}
+
+	if user.ID != "" {
+		w.WriteHeader((http.StatusOK))
+		return
+	} else {
+		w.WriteHeader(http.StatusNotFound)
+		return
+	}
+}
+
 func (a *App) getProjects(w http.ResponseWriter, r *http.Request) {
 	setupCorsResponse(&w, r)
 	if (*r).Method == "OPTIONS" {
@@ -59,7 +152,7 @@ func (a *App) getProjects(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	var projects []Project
-	err := a.DB.Find(&projects).Error
+	err := a.DB.Table("projects").Find(&projects).Error
 
 	if err != nil {
 		json.NewEncoder(w).Encode(err.Error())
@@ -90,12 +183,14 @@ func (a *App) addProject(w http.ResponseWriter, r *http.Request) {
 	}
 
 	project.ID = uuid.New().String()
-	err = a.DB.Save(&project).Error
+	err = a.DB.Table("projects").Save(&project).Error
 
 	if err != gorm.ErrRecordNotFound {
 		json.NewEncoder(w).Encode(err.Error())
+		return
 	} else {
 		w.WriteHeader(http.StatusCreated)
+		return
 	}
 }
 
@@ -116,17 +211,20 @@ func (a *App) updateProject(w http.ResponseWriter, r *http.Request) {
 	}
 
 	project.ID = mux.Vars(r)["id"]
-	err = a.DB.First(&project).Error
+	err = a.DB.Table("projects").First(&project).Error
 
 	if err == gorm.ErrRecordNotFound {
 		w.WriteHeader(http.StatusNotFound)
+		return
 	} else {
-		err = a.DB.Save(&project).Error
+		err = a.DB.Table("projects").Save(&project).Error
 
 		if err != nil {
 			json.NewEncoder(w).Encode(err.Error())
+			return
 		} else {
 			w.WriteHeader(http.StatusOK)
+			return
 		}
 	}
 }
@@ -139,12 +237,14 @@ func (a *App) deleteProject(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 
-	err := a.DB.Unscoped().Delete(&Project{ID: mux.Vars(r)["id"]}).Error
+	err := a.DB.Table("projects").Unscoped().Delete(&Project{ID: mux.Vars(r)["id"]}).Error
 
 	if err != nil {
 		json.NewEncoder(w).Encode(err.Error())
+		return
 	} else {
 		w.WriteHeader(http.StatusOK)
+		return
 	}
 }
 
@@ -157,7 +257,7 @@ func (a *App) getProjectsByDepartment(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	var projects []Project
-	err := a.DB.Find(&projects, "department = ?", mux.Vars(r)["department"]).Error
+	err := a.DB.Table("projects").Find(&projects, "department = ?", mux.Vars(r)["department"]).Error
 
 	if err != nil {
 		json.NewEncoder(w).Encode(err.Error())
@@ -180,7 +280,7 @@ func (a *App) getProjectsBySearch(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	res := strings.Split(mux.Vars(r)["search_phrase"], " ")
-	tx := a.DB
+	tx := a.DB.Table("projects")
 
 	for _, element := range res {
 		search_term := "%" + element + "%"
