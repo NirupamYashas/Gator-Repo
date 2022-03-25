@@ -17,6 +17,10 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { HomepageComponent } from './homepage/homepage.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
+import { AddprojectSuccessComponent } from './addproject-success/addproject-success.component';
+import { MyProjectsComponent } from './my-projects/my-projects.component';
+import { UserProfileComponent } from './user-profile/user-profile.component';
+import { ProjectDescriptionComponent } from './project-description/project-description.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +32,10 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
     RegisterComponent,
     HomepageComponent,
     ToolbarComponent,
+    AddprojectSuccessComponent,
+    MyProjectsComponent,
+    UserProfileComponent,
+    ProjectDescriptionComponent,
   ],
   imports: [
     NgbModule,
