@@ -31,6 +31,7 @@ type User struct {
 	Lastname  string `json:"lastname"`
 	Email     string `json:"email"`
 	Password  string `json:"password"`
+	Isadmin   bool 	 `json:"isadmin"`
 }
 
 func setupCorsResponse(w *http.ResponseWriter, req *http.Request) {
