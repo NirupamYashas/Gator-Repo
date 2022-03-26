@@ -56,6 +56,10 @@ func (a *App) Start() {
 	// project = Project{ID: uuid.New().String(), Name: "ML Project", Department: "CISE", Email: "ml@gmail.com", Link: "github.com/ml"}
 	// a.db.Table("projects").Create(&project)
 
+	// var project Project
+	// a.DB.Table("projects").Where("id = ?", "b69cb878-148c-462e-9c3e-f66d04033570").First(&project)
+	// a.DB.Table("projects").Delete(&project)
+
 	a.R.HandleFunc("/api/users/signup", a.signupUser).Methods("POST", "OPTIONS")
 	a.R.HandleFunc("/api/users/login", a.loginUser).Methods("POST", "OPTIONS")
 
@@ -96,7 +100,7 @@ func (a *App) signupUser(w http.ResponseWriter, r *http.Request) {
 		user.ID = uuid.New().String()
 		err = a.DB.Table("users").Save(&user).Error
 
-		if err != gorm.ErrRecordNotFound {
+		if err != nil {
 			json.NewEncoder(w).Encode(err.Error())
 			return
 		}
@@ -185,7 +189,7 @@ func (a *App) addProject(w http.ResponseWriter, r *http.Request) {
 	project.ID = uuid.New().String()
 	err = a.DB.Table("projects").Save(&project).Error
 
-	if err != gorm.ErrRecordNotFound {
+	if err != nil {
 		json.NewEncoder(w).Encode(err.Error())
 		return
 	} else {
