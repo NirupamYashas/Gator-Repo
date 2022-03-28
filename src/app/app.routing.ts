@@ -8,6 +8,7 @@ import {ChangeAccountSettingsComponent} from "./change-account-settings/change-a
 export const AvailableRoutes: any = [
     { path: "", component: HomepageComponent},
     { path: "projects", component: ProjectsComponent},
+    { path: "projects/project", component: ProjectPageComponent},
     { path: "create", component: CreateComponent },
     { path: "homepage", component: HomepageComponent},
     { path: "register", component: RegisterComponent},

@@ -22,6 +22,7 @@ import { MyProjectsComponent } from './my-projects/my-projects.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { ProjectDescriptionComponent } from './project-description/project-description.component';
 import { ChangeAccountSettingsComponent } from './change-account-settings/change-account-settings.component';
+import { ProjectPageComponent } from './project-page/project-page.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { ChangeAccountSettingsComponent } from './change-account-settings/change
     UserProfileComponent,
     ProjectDescriptionComponent,
     ChangeAccountSettingsComponent,
+    ProjectPageComponent,
   ],
   imports: [
     NgbModule,
