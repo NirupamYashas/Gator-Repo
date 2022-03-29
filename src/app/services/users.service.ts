@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient,HttpHeaders, HttpParams } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -9,5 +9,14 @@ export class UsersService {
   private _registerUrl = "http://localhost:8080/api/users/signup";
   private _loginUrl = "http://localhost:8080/api/users/login";
 
-  constructor() { }
+  constructor(private httpclient: HttpClient) { }
+
+  addUser(createResource: any){
+
+    //Headers
+    const httpHeaders = new HttpHeaders();
+    httpHeaders.append('content-type','application/json')
+
+    return this.httpclient.post(this._registerUrl, createResource, {headers: httpHeaders});
+  }
 }
