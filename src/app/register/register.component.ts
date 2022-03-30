@@ -48,11 +48,14 @@ export class RegisterComponent implements OnInit {
 
   addUser(){
     console.log(this.addUserForm.value);
-    //console.log(this.addUserForm.get('email')?.value);
+    //Reading Form Values
+    /*
+    console.log(this.addUserForm.get('email')?.value);
 
-    // this.addUserForm.valueChanges.subscribe(data => {
-    //   console.log(data);
-    // });
+    this.addUserForm.valueChanges.subscribe(data => {
+       console.log(data);
+    });
+    */
   }
 
   addUserSubmit(){
@@ -63,6 +66,10 @@ export class RegisterComponent implements OnInit {
      const newFormData = { firstname: firstName, lastname: lastName, email: Email , password: Password };
      console.log(newFormData);
      this.usersService.addUser(newFormData).subscribe(data => {})
+  }
+
+  resetForm(){
+    this.addUserForm.reset();
   }
 
 }
