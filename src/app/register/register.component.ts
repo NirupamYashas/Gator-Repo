@@ -30,6 +30,20 @@ export class RegisterComponent implements OnInit {
       email: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', [Validators.required])
     })
+
+    //method for setting values in the form right away when the page is loaded
+    /*
+    const newUserObj = {
+      'firstname': 'yashas',
+      'lastname': 'kuchimanchi',
+      'email': 'example@gmail.com',
+      'password':'password'
+    }
+
+    this.addUserForm.setValue(newUserObj);
+
+    this.addUserForm.patchValue(newUserObj);
+    */
   }
 
   addUser(){
