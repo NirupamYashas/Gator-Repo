@@ -16,7 +16,6 @@ export class AppComponent {
   removeNavbar() {
     var title = this.location.prepareExternalUrl(this.location.path());
     title = title.slice(1);
-    console.log(title);
     if(title === 'projects'){
         return true;
     }

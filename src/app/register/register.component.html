@@ -28,21 +28,25 @@
                       <div class="input-row form-group">
                         <label>First Name</label>
                         <input type="text" formControlName="firstname" class="form-control" placeholder="First Name">
+                        <span class="text-danger" *ngIf="addUserForm.get('firstname')?.hasError('required') && addUserForm.get('firstname')?.touched">firstname is required</span>
                       </div>
 
                       <div class="input-row form-group">
                         <label>Last Name</label>
                         <input type="text" formControlName="lastname" class="form-control" placeholder="Last Name">
+                        <span class="text-danger" *ngIf="addUserForm.get('lastname')?.hasError('required') && addUserForm.get('lastname')?.touched">lastname is required</span>
                       </div>
 
                       <div class="input-row form-group">
                         <label>Email</label>
-                        <input type="text" formControlName="email" class="form-control" placeholder="Email">
+                        <input type="email" formControlName="email" class="form-control" placeholder="Email">
+                        <span class="text-danger" *ngIf="addUserForm.get('email')?.hasError('required') && addUserForm.get('email')?.touched">Email is required</span>
                       </div>
 
                       <div class="input-row form-group">
                         <label>Password</label>
                         <input type="text" formControlName="password" class="form-control" placeholder="Password">
+                        <span class="text-danger" *ngIf="addUserForm.get('password')?.hasError('required') && addUserForm.get('password')?.touched">password is required</span>
                       </div>
                       
                       <button class="btn btn-danger btn-block btn-round register" (click)="addUser()" [disabled]="!addUserForm.valid" routerLink="">Register</button>

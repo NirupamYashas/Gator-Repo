@@ -48,6 +48,11 @@ export class RegisterComponent implements OnInit {
 
   addUser(){
     console.log(this.addUserForm.value);
+    //console.log(this.addUserForm.get('email')?.value);
+
+    // this.addUserForm.valueChanges.subscribe(data => {
+    //   console.log(data);
+    // });
   }
 
   addUserSubmit(){
