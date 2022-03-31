@@ -19,4 +19,12 @@ export class UsersService {
 
     return this.httpclient.post(this._registerUrl, createResource, {headers: httpHeaders});
   }
+
+  authenticateUser(createResource: any){
+    //Headers
+    const httpHeaders = new HttpHeaders();
+    httpHeaders.append('content-type','application/json')
+
+    return this.httpclient.post(this._loginUrl, createResource, {headers: httpHeaders});
+  }
 }

@@ -22,6 +22,7 @@ import { MyProjectsComponent } from './my-projects/my-projects.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { ProjectDescriptionComponent } from './project-description/project-description.component';
 import { AdminProjectsComponent } from './admin/admin-projects/admin-projects.component';
+import { AlertComponent } from './alert/alert.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { AdminProjectsComponent } from './admin/admin-projects/admin-projects.co
     UserProfileComponent,
     ProjectDescriptionComponent,
     AdminProjectsComponent,
+    AlertComponent,
   ],
   imports: [
     NgbModule,

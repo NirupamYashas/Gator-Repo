@@ -25,29 +25,26 @@
 
                   <form class="login-form" [formGroup]="loginForm" (ngSubmit)="loginFormSubmit()">
 
-                      <div class="input-row">
+                      <div class="input-row form-group">
                         <label>Email</label>
-                        <div class="input-group form-group-no-border" [ngClass]="{'input-group-focus':focus===true}">
-                            <input type="text" class="form-control" formControlName="useremail" placeholder="Email" (focus)="focus=true" (blur)="focus=false">
-                            <div *ngIf="loginEmailField.touched && loginEmailField.hasError('required')" class="d-block invalid-feedback">Please
+                        <input type="text" class="form-control" formControlName="useremail" placeholder="Email">
+                        <div *ngIf="loginEmailField.touched && loginEmailField.hasError('required')" class="d-block invalid-feedback">Please
                                 provide a Email.</div>
-                            <div *ngIf="loginEmailField.touched && loginEmailField.hasError('email')" class="d-block invalid-feedback">Email
+                        <div *ngIf="loginEmailField.touched && loginEmailField.hasError('email')" class="d-block invalid-feedback">Email
                                 address is not valid</div>
-                        </div>
                       </div>
 
-                      <div class="input-row">
+                      <div class="input-row form-group">
                         <label>Password</label>
-                        <div class="input-group form-group-no-border" [ngClass]="{'input-group-focus':focus1===true}">
-                            <input type="text" class="form-control" formControlName="password" placeholder="Password" (focus)="focus1=true" (blur)="focus1=false">
-                            <div *ngIf="loginPasswordField.touched && loginPasswordField.hasError('required')" class="d-block invalid-feedback">
+                        <input type="text" class="form-control" formControlName="password" placeholder="Password">
+                        <div *ngIf="loginPasswordField.touched && loginPasswordField.hasError('required')" class="d-block invalid-feedback">
                               Please confirm a Password.</div>
-                        </div>
                       </div>
                   
                       
                       <button class="btn btn-danger btn-block btn-round" id="login-button" [disabled]="loginForm.invalid">Login</button>
                       <a class="btn btn-link">Forgot Password?</a>
+                      <a class="btn btn-link" (click)="resetForm()">Reset Form</a>
                   </form>
 
                   <div class="divider"><span></span><span>OR</span><span></span></div>

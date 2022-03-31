@@ -9,9 +9,7 @@ import { Router } from "@angular/router";
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  test : Date = new Date();
-  focus: any;
-  focus1: any;
+
   loginForm!: FormGroup;
 
   constructor(private router: Router,private http: HttpClient) { }
@@ -45,9 +43,13 @@ export class LoginComponent implements OnInit {
       // })
       this.router.navigate(['/projects'])
       
-  } else {
+    } else {
       console.log('There is a problem with the login form');
+    }
   }
-}
+
+  resetForm(){
+    this.loginForm.reset();
+  }
 
 }
