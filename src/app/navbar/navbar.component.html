@@ -1,6 +1,6 @@
 <nav class="nav navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
-      <a class="navbar-brand" routerLink="/projects">UF Projects List</a>
+      <a class="navbar-brand" (click)="displayProjects()">UF Projects List</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -9,23 +9,13 @@
           <li class="nav-item">
             <a class="nav-link active" aria-current="page" routerLink="/create">Add New Project</a>
           </li>
-          <li ngbDropdown class="nav-item dropdown">
-            <a ngbDropdownToggle class="nav-link dropdown-toggle" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Department</a>
-            <div ngbDropdownMenu class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-              <a class="dropdown-item" routerLink="#">Computer Science Engineering</a>
-              <a class="dropdown-item" routerLink="#">Mechanical Engineering</a>
-              <a class="dropdown-item" routerLink="#">Electrical Engineering</a>
-              <a class="dropdown-item" routerLink="#">Law</a>
-              <a class="dropdown-item" routerLink="#">Arts and Sciences</a>
-            </div>
-            <!-- <select id="inputDepartment" formControlName="department_name" class="form-control" (change)="selectChangeHandler($event)">
-              <option selected>Select Department...</option>
-              <option>Computer Science Engineering</option>
-              <option>Electrical Engineering</option>
-              <option>Mechanical Engineering</option>
-              <option>Law</option>
-              <option>Arts and Sciences</option>
-            </select> -->
+          <li class="nav-item dropdown">
+            <form [formGroup]="departmentForm">
+              <select id="inputDepartment" formControlName="department_name" class="form-control">
+                <option value="">Select Department Name..</option>
+                <option *ngFor="let name of departments">{{name}}</option>
+              </select>
+            </form>
           </li>
         </ul>
         <form class="d-flex">

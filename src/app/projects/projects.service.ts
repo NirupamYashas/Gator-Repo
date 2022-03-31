@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
+import { variable } from '../variables/variable';
 
 
 @Injectable({
@@ -15,12 +16,15 @@ export class ProjectsService{
         const httpHeaders = new HttpHeaders();
         httpHeaders.append('content-type','application/json')
 
-        // if(department === null){
+        var department = variable.departmentName;
+        console.log(department);
+
+        if(department == "All-Projects" ){
             //Get the HTTP Method working for you
             return  this.httpclient.get('http://localhost:8080/api/projects', {headers: httpHeaders});
-        // }else{
-        //     return  this.httpclient.get('http://localhost:8080/api/projects/departments/'+department, {headers: httpHeaders});
-        // }  
+        }else{
+            return  this.httpclient.get('http://localhost:8080/api/projects/departments/'+department, {headers: httpHeaders});
+        }  
 
     }
 

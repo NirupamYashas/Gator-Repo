@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup ,Validators } from '@angular/forms';
 import { UsersService } from '../services/users.service';
 
@@ -7,7 +7,7 @@ import { UsersService } from '../services/users.service';
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent implements OnInit{
 
   addUserForm! : FormGroup;
 
@@ -15,6 +15,7 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit(): void {
 
+    
     /*
     this.addUserForm = new FormGroup({
       firstname: new FormControl('', [Validators.required]),
@@ -29,7 +30,14 @@ export class RegisterComponent implements OnInit {
       lastname: new FormControl('', [Validators.required]),
       email: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', [Validators.required])
-    })
+    });
+
+    //value changes method implementation for learning
+    /*
+    this.addUserForm.get('password')?.valueChanges.subscribe(data => {
+      console.log(data);
+    });
+    */
 
     //method for setting values in the form right away when the page is loaded
     /*

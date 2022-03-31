@@ -1,5 +1,4 @@
 import { ProjectsService } from './projects.service';
-import { NavbarComponent } from '../navbar/navbar.component';
 
 import {  Component , OnInit} from '@angular/core';
 
@@ -15,18 +14,9 @@ export class ProjectsComponent {
     
     projects: any;
     ngOnInit(): void{
-        //this.projects = this.service.getProjects();
-        
 
         this.service.getProjects().subscribe(data => {
             this.projects = data;
-        })
+        })  
     }
-
-    // refreshProjects(Value: String){
-    //     this.service.getProjects(Value).subscribe(data => {
-    //         this.projects = data;
-    //     })
-    // }
-   
 }

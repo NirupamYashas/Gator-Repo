@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ProjectsComponent } from '../projects/projects.component';
-
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { variable } from '../variables/variable';
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-navbar',
@@ -9,19 +10,41 @@ import { ProjectsComponent } from '../projects/projects.component';
 })
 export class NavbarComponent implements OnInit {
 
-  selectedValue: string = '';
+  departmentForm! : FormGroup;
+
+  departments: any = ['Computer Science Engineering', 'Electrical Engineering', 'Mechanical Engineering', 'Law','Arts and Sciences']
+
   projects: any;
 
-  // constructor(public service: ProjectsComponent) { }
-
-  //event handler for the select element's change event
-  selectChangeHandler (event: any) {
-    //update the ui
-    this.selectedValue = event.target.value;
-    // this.service.refreshProjects(this.selectedValue);
-  }
+  constructor(public fb: FormBuilder, private router: Router) { }
 
   ngOnInit(): void {
+
+    this.departmentForm = this.fb.group({
+      department_name: ['']
+    });
+
+    this.departmentForm.get('department_name')?.valueChanges.subscribe(data => {
+      variable.departmentName = data;
+      // console.log(variable.departmentName);
+      this.reloadComponent();
+    });
+  }
+
+  onSubmit(){
+    alert(JSON.stringify(this.departmentForm.value))
+  }
+
+  reloadComponent() {
+    let currentUrl = this.router.url;
+        this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+        this.router.onSameUrlNavigation = 'reload';
+        this.router.navigate([currentUrl]);
+  }
+
+  displayProjects(){
+    variable.departmentName = "All-Projects";
+    this.reloadComponent();
   }
 
 }
