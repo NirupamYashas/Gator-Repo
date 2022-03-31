@@ -4,6 +4,7 @@ import { HomepageComponent } from "./homepage/homepage.component";
 import { RegisterComponent } from "./register/register.component";
 import { LoginComponent } from "./login/login.component";
 import {ChangeAccountSettingsComponent} from "./change-account-settings/change-account-settings.component"
+import {ProjectPageComponent} from "./project-page/project-page.component"
 
 export const AvailableRoutes: any = [
     { path: "", component: HomepageComponent},

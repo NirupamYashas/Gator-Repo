@@ -141,10 +141,10 @@ body {
     color: #fe5621
 }
 
-.bgTitle {
-    background: url(../../img/bg-sharpen.jpg) no-repeat;
+/* .bgTitle {
+    background: url(../assets/antoine-barres.jpg) no-repeat;
     background-size: 100% 100%
-}
+} */
 
 .bgTitle .boxTitle {
     margin: 0;
@@ -319,14 +319,14 @@ body {
     margin: 0
 }
 
-.userActivities .status li .share a .fa {
+/* .userActivities .status li .share a .fa {
     color: #9da2a6;
     margin: 0 3px 0 0;
     -webkit-transition: color .3s ease;
     -moz-transition: color .3s ease;
     -ms-transition: color .3s ease;
     -o-transition: color .3s ease
-}
+} */
 
 .userActivities .status li .share a:hover .fa {
     color: #fe5621
