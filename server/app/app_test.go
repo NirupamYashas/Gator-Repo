@@ -3,6 +3,7 @@ package app
 import (
 	"bytes"
 	"encoding/json"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -36,6 +37,16 @@ func TestGetProjects(t *testing.T) {
 	checkBody(r.Body, proj, t)
 }
 
+func toReader(content string) io.Reader {
+	return bytes.NewBuffer([]byte(content))
+}
+
+func firstProject(app App) models.Project {
+	var all []models.Project
+	app.DB.Find(&all)
+	return all[0]
+}
+
 func checkStatusCode(code int, want int, t *testing.T) {
 	if code != want {
 		t.Errorf("Wrong status code: got %v want %v", code, want)
@@ -57,5 +68,23 @@ func checkBody(body *bytes.Buffer, st models.Project, t *testing.T) {
 	}
 	if projects[0] != st {
 		t.Errorf("Wrong body: got %v want %v", projects[0], st)
+	}
+}
+
+func checkProperties(p models.Project, t *testing.T) {
+	if p.ID != "test_id" {
+		t.Errorf("ID should match: got %v want %v", p.ID, "test_id")
+	}
+	if p.Name != "test_name" {
+		t.Errorf("Name should match: got %v want %v", p.Name, "test_name")
+	}
+	if p.Department != "test_department" {
+		t.Errorf("Department should match: got %v want %v", p.Department, "test_department")
+	}
+	if p.Email != "test@email.com" {
+		t.Errorf("Department should match: got %v want %v", p.Email, "test@email.com")
+	}
+	if p.Link != "test_link.com" {
+		t.Errorf("Department should match: got %v want %v", p.Link, "test_link.com")
 	}
 }
