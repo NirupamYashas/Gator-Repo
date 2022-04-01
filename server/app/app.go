@@ -34,7 +34,7 @@ type User struct {
 	Isadmin   bool   `json:"isadmin"`
 }
 
-type LoginReply struct {
+type LoginSignupReply struct {
 	Userdata User   `json:"userdata"`
 	Message  string `json:"message"`
 	Allow    bool   `json:"allow"`
@@ -126,10 +126,12 @@ func (a *App) signupUser(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	var user User
+	var reply LoginSignupReply
 	err := json.NewDecoder(r.Body).Decode(&user)
 
 	if err != nil {
-		json.NewEncoder(w).Encode(err.Error())
+		reply = LoginSignupReply{Message: "Error in decoding", Allow: false}
+		json.NewEncoder(w).Encode(reply)
 		return
 	}
 
@@ -137,7 +139,8 @@ func (a *App) signupUser(w http.ResponseWriter, r *http.Request) {
 
 	if err == gorm.ErrRecordNotFound {
 		if user.Firstname == "" || user.Lastname == "" {
-			w.WriteHeader(http.StatusBadRequest)
+			reply = LoginSignupReply{Message: "Firstname and Lastname are required", Allow: false}
+			json.NewEncoder(w).Encode(reply)
 			return
 		}
 
@@ -145,15 +148,18 @@ func (a *App) signupUser(w http.ResponseWriter, r *http.Request) {
 		err = a.DB.Table("users").Save(&user).Error
 
 		if err != nil {
-			json.NewEncoder(w).Encode(err.Error())
+			reply = LoginSignupReply{Message: "Error in saving user", Allow: false}
+			json.NewEncoder(w).Encode(reply)
 			return
 		}
 
-		w.WriteHeader(http.StatusCreated)
+		reply = LoginSignupReply{Message: "User created successfully", Allow: true, Userdata: user}
+		json.NewEncoder(w).Encode(reply)
 		return
 	}
 
-	w.WriteHeader(http.StatusBadRequest)
+	reply = LoginSignupReply{Message: "User already exists", Allow: false}
+	json.NewEncoder(w).Encode(reply)
 }
 
 func (a *App) loginUser(w http.ResponseWriter, r *http.Request) {
@@ -165,11 +171,11 @@ func (a *App) loginUser(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	var user User
-	var reply LoginReply
+	var reply LoginSignupReply
 	err := json.NewDecoder(r.Body).Decode(&user)
 
 	if err != nil {
-		reply = LoginReply{Message: err.Error(), Allow: false}
+		reply = LoginSignupReply{Message: err.Error(), Allow: false}
 		json.NewEncoder(w).Encode(reply)
 		return
 	}
@@ -177,21 +183,21 @@ func (a *App) loginUser(w http.ResponseWriter, r *http.Request) {
 	err = a.DB.Table("users").Where("email = ? AND password = ?", user.Email, user.Password).First(&user).Error
 
 	if err == gorm.ErrRecordNotFound {
-		reply = LoginReply{Message: "Invalid Credentials", Allow: false}
+		reply = LoginSignupReply{Message: "Invalid Credentials", Allow: false}
 		json.NewEncoder(w).Encode(reply)
 		return
 	} else if err != nil {
-		reply = LoginReply{Message: err.Error(), Allow: false}
+		reply = LoginSignupReply{Message: err.Error(), Allow: false}
 		json.NewEncoder(w).Encode(reply)
 		return
 	}
 
 	if user.ID != "" {
-		reply = LoginReply{Message: "Success", Allow: true, Userdata: user}
+		reply = LoginSignupReply{Message: "Success", Allow: true, Userdata: user}
 		json.NewEncoder(w).Encode(reply)
 		return
 	} else {
-		reply = LoginReply{Message: "Invalid Credentials", Allow: false}
+		reply = LoginSignupReply{Message: "Invalid Credentials", Allow: false}
 		json.NewEncoder(w).Encode(reply)
 		return
 	}
