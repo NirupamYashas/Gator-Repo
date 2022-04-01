@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"strings"
 
+	"server/models"
+
 	"github.com/google/uuid"
 	"github.com/gorilla/mux"
 
@@ -17,28 +19,28 @@ type App struct {
 	R  *mux.Router
 }
 
-type Project struct {
-	ID         string `gorm:"primaryKey" json:"id"`
-	Name       string `json:"name"`
-	Department string `json:"department"`
-	Email      string `json:"email"`
-	Link       string `json:"link"`
-}
+// type Project struct {
+// 	ID         string `gorm:"primaryKey" json:"id"`
+// 	Name       string `json:"name"`
+// 	Department string `json:"department"`
+// 	Email      string `json:"email"`
+// 	Link       string `json:"link"`
+// }
 
-type User struct {
-	ID        string `gorm:"primaryKey" json:"id"`
-	Firstname string `json:"firstname"`
-	Lastname  string `json:"lastname"`
-	Email     string `json:"email"`
-	Password  string `json:"password"`
-	Isadmin   bool   `json:"isadmin"`
-}
+// type User struct {
+// 	ID        string `gorm:"primaryKey" json:"id"`
+// 	Firstname string `json:"firstname"`
+// 	Lastname  string `json:"lastname"`
+// 	Email     string `json:"email"`
+// 	Password  string `json:"password"`
+// 	Isadmin   bool   `json:"isadmin"`
+// }
 
-type LoginSignupReply struct {
-	Userdata User   `json:"userdata"`
-	Message  string `json:"message"`
-	Allow    bool   `json:"allow"`
-}
+// type LoginSignupReply struct {
+// 	Userdata User   `json:"userdata"`
+// 	Message  string `json:"message"`
+// 	Allow    bool   `json:"allow"`
+// }
 
 func setupCorsResponse(w *http.ResponseWriter, req *http.Request) {
 	(*w).Header().Set("Access-Control-Allow-Origin", "*")
@@ -47,8 +49,8 @@ func setupCorsResponse(w *http.ResponseWriter, req *http.Request) {
 }
 
 func (a *App) Start() {
-	a.DB.AutoMigrate(&User{})
-	a.DB.AutoMigrate(&Project{})
+	a.DB.AutoMigrate(&models.User{})
+	a.DB.AutoMigrate(&models.Project{})
 
 	// var user User = User{ID: uuid.New().String(), Firstname: "Jagan", Lastname: "Dwarampudi", Email: "scientistjagan2000@gmail.com", Password: "password"}
 	// a.DB.Table("users").Create(&user)
@@ -89,7 +91,7 @@ func (a *App) getUsers(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 
-	var users []User
+	var users []models.User
 	err := a.DB.Table("users").Find(&users).Error
 
 	if err != nil {
@@ -125,12 +127,12 @@ func (a *App) signupUser(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 
-	var user User
-	var reply LoginSignupReply
+	var user models.User
+	var reply models.LoginSignupReply
 	err := json.NewDecoder(r.Body).Decode(&user)
 
 	if err != nil {
-		reply = LoginSignupReply{Message: "Error in decoding", Allow: false}
+		reply = models.LoginSignupReply{Message: "Error in decoding", Allow: false}
 		json.NewEncoder(w).Encode(reply)
 		return
 	}
@@ -139,7 +141,7 @@ func (a *App) signupUser(w http.ResponseWriter, r *http.Request) {
 
 	if err == gorm.ErrRecordNotFound {
 		if user.Firstname == "" || user.Lastname == "" {
-			reply = LoginSignupReply{Message: "Firstname and Lastname are required", Allow: false}
+			reply = models.LoginSignupReply{Message: "Firstname and Lastname are required", Allow: false}
 			json.NewEncoder(w).Encode(reply)
 			return
 		}
@@ -148,17 +150,17 @@ func (a *App) signupUser(w http.ResponseWriter, r *http.Request) {
 		err = a.DB.Table("users").Save(&user).Error
 
 		if err != nil {
-			reply = LoginSignupReply{Message: "Error in saving user", Allow: false}
+			reply = models.LoginSignupReply{Message: "Error in saving user", Allow: false}
 			json.NewEncoder(w).Encode(reply)
 			return
 		}
 
-		reply = LoginSignupReply{Message: "User created successfully", Allow: true, Userdata: user}
+		reply = models.LoginSignupReply{Message: "User created successfully", Allow: true, Userdata: user}
 		json.NewEncoder(w).Encode(reply)
 		return
 	}
 
-	reply = LoginSignupReply{Message: "User already exists", Allow: false}
+	reply = models.LoginSignupReply{Message: "User already exists", Allow: false}
 	json.NewEncoder(w).Encode(reply)
 }
 
@@ -170,12 +172,12 @@ func (a *App) loginUser(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 
-	var user User
-	var reply LoginSignupReply
+	var user models.User
+	var reply models.LoginSignupReply
 	err := json.NewDecoder(r.Body).Decode(&user)
 
 	if err != nil {
-		reply = LoginSignupReply{Message: err.Error(), Allow: false}
+		reply = models.LoginSignupReply{Message: err.Error(), Allow: false}
 		json.NewEncoder(w).Encode(reply)
 		return
 	}
@@ -183,21 +185,21 @@ func (a *App) loginUser(w http.ResponseWriter, r *http.Request) {
 	err = a.DB.Table("users").Where("email = ? AND password = ?", user.Email, user.Password).First(&user).Error
 
 	if err == gorm.ErrRecordNotFound {
-		reply = LoginSignupReply{Message: "Invalid Credentials", Allow: false}
+		reply = models.LoginSignupReply{Message: "Invalid Credentials", Allow: false}
 		json.NewEncoder(w).Encode(reply)
 		return
 	} else if err != nil {
-		reply = LoginSignupReply{Message: err.Error(), Allow: false}
+		reply = models.LoginSignupReply{Message: err.Error(), Allow: false}
 		json.NewEncoder(w).Encode(reply)
 		return
 	}
 
 	if user.ID != "" {
-		reply = LoginSignupReply{Message: "Success", Allow: true, Userdata: user}
+		reply = models.LoginSignupReply{Message: "Success", Allow: true, Userdata: user}
 		json.NewEncoder(w).Encode(reply)
 		return
 	} else {
-		reply = LoginSignupReply{Message: "Invalid Credentials", Allow: false}
+		reply = models.LoginSignupReply{Message: "Invalid Credentials", Allow: false}
 		json.NewEncoder(w).Encode(reply)
 		return
 	}
@@ -211,7 +213,7 @@ func (a *App) getProjects(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 
-	var projects []Project
+	var projects []models.Project
 	err := a.DB.Table("projects").Find(&projects).Error
 
 	if err != nil {
@@ -235,7 +237,7 @@ func (a *App) addProject(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 
-	var project Project
+	var project models.Project
 	err := json.NewDecoder(r.Body).Decode(&project)
 
 	if err != nil {
@@ -263,7 +265,7 @@ func (a *App) updateProject(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 
-	var project Project
+	var project models.Project
 	err := json.NewDecoder(r.Body).Decode(&project)
 
 	if err != nil {
@@ -298,7 +300,7 @@ func (a *App) deleteProject(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 
-	err := a.DB.Table("projects").Unscoped().Delete(&Project{ID: mux.Vars(r)["id"]}).Error
+	err := a.DB.Table("projects").Unscoped().Delete(&models.Project{ID: mux.Vars(r)["id"]}).Error
 
 	if err != nil {
 		json.NewEncoder(w).Encode(err.Error())
@@ -317,7 +319,7 @@ func (a *App) getProjectsByDepartment(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 
-	var projects []Project
+	var projects []models.Project
 	err := a.DB.Table("projects").Find(&projects, "department = ?", mux.Vars(r)["department"]).Error
 
 	if err != nil {
@@ -348,7 +350,7 @@ func (a *App) getProjectsBySearch(w http.ResponseWriter, r *http.Request) {
 		tx = tx.Where("name LIKE ? OR email LIKE ?", search_term, search_term)
 	}
 
-	var projects []Project
+	var projects []models.Project
 	err := tx.Find(&projects).Error
 
 	if err != nil {
