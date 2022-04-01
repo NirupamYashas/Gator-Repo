@@ -31,7 +31,7 @@ type User struct {
 	Lastname  string `json:"lastname"`
 	Email     string `json:"email"`
 	Password  string `json:"password"`
-	Isadmin   bool 	 `json:"isadmin"`
+	Isadmin   bool   `json:"isadmin"`
 }
 
 func setupCorsResponse(w *http.ResponseWriter, req *http.Request) {
@@ -63,6 +63,7 @@ func (a *App) Start() {
 
 	a.R.HandleFunc("/api/users/signup", a.signupUser).Methods("POST", "OPTIONS")
 	a.R.HandleFunc("/api/users/login", a.loginUser).Methods("POST", "OPTIONS")
+	a.R.HandleFunc("/api/users", a.getUsers).Methods("GET", "OPTIONS")
 
 	a.R.HandleFunc("/api/projects", a.getProjects).Methods("GET", "OPTIONS")
 	a.R.HandleFunc("/api/projects", a.addProject).Methods("POST", "OPTIONS")
@@ -72,6 +73,30 @@ func (a *App) Start() {
 	a.R.HandleFunc("/api/projects/search/{search_phrase}", a.getProjectsBySearch).Methods("GET", "OPTIONS")
 
 	log.Fatal(http.ListenAndServe(":8080", a.R))
+}
+
+func (a *App) getUsers(w http.ResponseWriter, r *http.Request) {
+	setupCorsResponse(&w, r)
+	if (*r).Method == "OPTIONS" {
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+
+	var users []User
+	err := a.DB.Table("users").Find(&users).Error
+
+	if err != nil {
+		json.NewEncoder(w).Encode(err.Error())
+		return
+	}
+
+	err = json.NewEncoder(w).Encode(users)
+
+	if err != nil {
+		json.NewEncoder(w).Encode(err.Error())
+		return
+	}
 }
 
 func (a *App) signupUser(w http.ResponseWriter, r *http.Request) {
@@ -168,6 +193,7 @@ func (a *App) getProjects(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		json.NewEncoder(w).Encode(err.Error())
+		return
 	}
 }
 
