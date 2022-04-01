@@ -98,3 +98,26 @@ func UpdateProject(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 }
+
+func DeleteProject(w http.ResponseWriter, r *http.Request) {
+	cors.SetupCorsResponse(&w, r)
+	if (*r).Method == "OPTIONS" {
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+
+	var project models.Project
+	vars := mux.Vars(r)
+	id := vars["id"]
+	project.ID = id
+	err := utilities.App.DB.Table("projects").Unscoped().Delete(project).Error
+
+	if err != nil {
+		json.NewEncoder(w).Encode(err.Error())
+		return
+	} else {
+		json.NewEncoder(w).Encode("Project deleted successfully")
+		return
+	}
+}
