@@ -166,6 +166,7 @@
 
   .dropdown-menu > a{
     color: black;
+    cursor: pointer;
   }
 
   .dropdown-toggle{

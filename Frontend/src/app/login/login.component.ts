@@ -75,6 +75,10 @@ export class LoginComponent implements OnInit {
     }
   }
 
+  googleLogin(){
+    this.authenticationService.login();
+  }
+
   resetForm(){
     this.loginForm.reset();
   }

@@ -23,17 +23,19 @@
           <li class="tool tool3">
               <a [routerLink]="['/home']" class="nav-link"><i class="nc-icon nc-layout-11"></i> Blog</a>
           </li>
-          <button [routerLink]="['/login']" class="btn btn-warning lr" type="submit">Login</button>
+          <ng-template #anonymousUser>
+            <button [routerLink]="['/login']" class="btn btn-warning lr" type="submit">Login</button>
+          </ng-template>
           <button [routerLink]="['/register']" class="btn btn-warning lr" type="submit">Sign-up</button>
-          <li ngbDropdown class="nav-item dropdown">
+          <li ngbDropdown *ngIf="authenticationService.user$ | async as user;else anonymousUser" class="nav-item dropdown">
             <a ngbDropdownToggle class="nav-link dropdown-toggle" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Username
+              {{user.displayName}}
             </a>
               <div ngbDropdownMenu class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                 <a class="dropdown-item" routerLink="/projects">Projects List</a>
                 <a class="dropdown-item" routerLink="/create">Add New project</a>
                 <a class="dropdown-item" routerLink="/users">Manage Users</a>
-                <a class="dropdown-item">Log Out</a>
+                <a class="dropdown-item" (click)="logout()">Log Out</a>
               </div>
           </li>
       </ul>

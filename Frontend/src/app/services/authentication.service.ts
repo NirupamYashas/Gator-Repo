@@ -2,6 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { ActivatedRoute } from '@angular/router';
+import firebase from 'firebase/compat/app';
 
 import { User } from '../_models/user';
 
@@ -12,7 +15,10 @@ export class AuthenticationService {
   private currentUserSubject: BehaviorSubject<User>;
   public currentUser: Observable<User>;
 
-    constructor(private http: HttpClient) {
+  user$: Observable<firebase.User|null>;
+
+  constructor(private http: HttpClient,private afAuth: AngularFireAuth,private route: ActivatedRoute) {
+    this.user$ = afAuth.authState;
   }
 
   public get currentUserValue(): User {
@@ -20,8 +26,10 @@ export class AuthenticationService {
   }
 
   login() {
+    this.afAuth.signInWithRedirect(new firebase.auth.GoogleAuthProvider());
   }
 
   logout() {
+    this.afAuth.signOut();
   }
 }
