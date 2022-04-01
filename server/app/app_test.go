@@ -37,6 +37,26 @@ func TestGetProjects(t *testing.T) {
 	checkBody(r.Body, proj, t)
 }
 
+func TestAddProject(t *testing.T) {
+	app := initApp()
+	var rqBody = toReader(`{
+		"id": "test_id", 
+		"name": "test_project", 
+		"department": "test_department", 
+		"email": "test@email.com", 
+		"link": "test_link.com"
+	}`)
+	req, _ := http.NewRequest("POST", "/api/projects", rqBody)
+	r := httptest.NewRecorder()
+	handler := http.HandlerFunc(app.addProject)
+
+	handler.ServeHTTP(r, req)
+
+	checkStatusCode(r.Code, http.StatusCreated, t)
+	checkContentType(r, t)
+	checkProperties(firstProject(app), t)
+}
+
 func toReader(content string) io.Reader {
 	return bytes.NewBuffer([]byte(content))
 }
