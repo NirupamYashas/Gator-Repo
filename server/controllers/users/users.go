@@ -12,6 +12,18 @@ import (
 	"gorm.io/gorm"
 )
 
+func Start() {
+	utilities.App.DB.AutoMigrate(&models.User{})
+	addRoutes()
+}
+
+func addRoutes() {
+	utilities.App.R.HandleFunc("/api/users/signup", SignupUser).Methods("POST", "OPTIONS")
+	utilities.App.R.HandleFunc("/api/users/login", LoginUser).Methods("POST", "OPTIONS")
+	utilities.App.R.HandleFunc("/api/users", GetUsers).Methods("GET", "OPTIONS")
+	utilities.App.R.HandleFunc("/api/users/{id}", DeleteUser).Methods("DELETE", "OPTIONS")
+}
+
 func GetUsers(w http.ResponseWriter, r *http.Request) {
 	cors.SetupCorsResponse(&w, r)
 	if (*r).Method == "OPTIONS" {
