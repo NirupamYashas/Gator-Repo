@@ -34,6 +34,12 @@ type User struct {
 	Isadmin   bool   `json:"isadmin"`
 }
 
+type LoginReply struct {
+	Userdata User   `json:"userdata"`
+	Message  string `json:"message"`
+	Allow    bool   `json:"allow"`
+}
+
 func setupCorsResponse(w *http.ResponseWriter, req *http.Request) {
 	(*w).Header().Set("Access-Control-Allow-Origin", "*")
 	(*w).Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
@@ -99,6 +105,18 @@ func (a *App) getUsers(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// delete user function
+// func (a *App) deleteUser(w http.ResponseWriter, r *http.Request) {
+// 	setupCorsResponse(&w, r)
+// 	if (*r).Method == "OPTIONS" {
+// 		return
+// 	}
+
+// 	w.Header().Set("Content-Type", "application/json")
+
+// 	var user User
+// }
+
 func (a *App) signupUser(w http.ResponseWriter, r *http.Request) {
 	setupCorsResponse(&w, r)
 	if (*r).Method == "OPTIONS" {
@@ -147,28 +165,34 @@ func (a *App) loginUser(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	var user User
+	var reply LoginReply
 	err := json.NewDecoder(r.Body).Decode(&user)
 
 	if err != nil {
-		json.NewEncoder(w).Encode(err.Error())
+		reply = LoginReply{Message: err.Error(), Allow: false}
+		json.NewEncoder(w).Encode(reply)
 		return
 	}
 
 	err = a.DB.Table("users").Where("email = ? AND password = ?", user.Email, user.Password).First(&user).Error
 
 	if err == gorm.ErrRecordNotFound {
-		w.WriteHeader(http.StatusNotFound)
+		reply = LoginReply{Message: "Invalid Credentials", Allow: false}
+		json.NewEncoder(w).Encode(reply)
 		return
 	} else if err != nil {
-		json.NewEncoder(w).Encode(err.Error())
+		reply = LoginReply{Message: err.Error(), Allow: false}
+		json.NewEncoder(w).Encode(reply)
 		return
 	}
 
 	if user.ID != "" {
-		w.WriteHeader((http.StatusOK))
+		reply = LoginReply{Message: "Success", Allow: true, Userdata: user}
+		json.NewEncoder(w).Encode(reply)
 		return
 	} else {
-		w.WriteHeader(http.StatusNotFound)
+		reply = LoginReply{Message: "Invalid Credentials", Allow: false}
+		json.NewEncoder(w).Encode(reply)
 		return
 	}
 }
