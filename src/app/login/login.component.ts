@@ -58,15 +58,15 @@ export class LoginComponent implements OnInit {
       console.log(email,password)
       this.http.post<any>('http://localhost:8080/api/users/login', { email: email, password: password }).subscribe(data => {
         console.log(data);
-        // this.loginMsg = data.Msg;
-
-        // if(this.loginMsg == "Success"){
-        //   alert(this.loginMsg);
-        //   this.router.navigate(['/projects']);
-        // }else{
-        //   alert(this.loginMsg);
-        //   this.router.navigate(['/login']);
-        // }
+        this.loginMsg = data.message;
+        
+        if(data.allow){
+          alert(this.loginMsg);
+          this.router.navigate(['/projects']);
+        }else{
+          alert(this.loginMsg);
+          this.router.navigate(['/login']);
+        }
 
       });
      
