@@ -19,6 +19,9 @@ export class AuthenticationService {
       return this.currentUserSubject.value;
   }
 
+  login() {
+  }
+
   logout() {
   }
 }
