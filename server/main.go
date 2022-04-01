@@ -2,6 +2,8 @@ package main
 
 import (
 	"server/app"
+	"server/models"
+	"server/utilities"
 
 	"github.com/gorilla/mux"
 	"gorm.io/driver/sqlite"
@@ -15,7 +17,7 @@ func main() {
 		panic(err.Error())
 	}
 
-	app := app.App{
+	utilities.App = models.App{
 		DB: db,
 		R:  mux.NewRouter(),
 	}
