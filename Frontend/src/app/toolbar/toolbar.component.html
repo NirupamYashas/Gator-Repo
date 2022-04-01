@@ -25,16 +25,18 @@
           </li>
           <ng-template #anonymousUser>
             <button [routerLink]="['/login']" class="btn btn-warning lr" type="submit">Login</button>
+            <button [routerLink]="['/register']" class="btn btn-warning lr" type="submit">Sign-up</button>
           </ng-template>
-          <button [routerLink]="['/register']" class="btn btn-warning lr" type="submit">Sign-up</button>
           <li ngbDropdown *ngIf="authenticationService.user$ | async as user;else anonymousUser" class="nav-item dropdown">
             <a ngbDropdownToggle class="nav-link dropdown-toggle" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               {{user.displayName}}
             </a>
               <div ngbDropdownMenu class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                <a class="dropdown-item" routerLink="/changeaccountsettings">Profile</a>
                 <a class="dropdown-item" routerLink="/projects">Projects List</a>
                 <a class="dropdown-item" routerLink="/create">Add New project</a>
-                <a class="dropdown-item" routerLink="/users">Manage Users</a>
+                <a class="dropdown-item" routerLink="/admin/users">Manage Users</a>
+                <a class="dropdown-item" routerLink="/admin/projects">Manage Projects</a>
                 <a class="dropdown-item" (click)="logout()">Log Out</a>
               </div>
           </li>
