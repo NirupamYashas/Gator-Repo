@@ -164,6 +164,14 @@
     color: orange;
   }
 
+  .dropdown-menu > a{
+    color: black;
+  }
+
+  .dropdown-toggle{
+    cursor: pointer;
+}
+
   .terminal {
     position: relative;
     width: 80%;
