@@ -6,7 +6,9 @@ import (
 	"net/http"
 	"strings"
 
+	"server/cors"
 	"server/models"
+
 	// "server/controllers"
 
 	"github.com/google/uuid"
@@ -20,11 +22,11 @@ type App struct {
 	R  *mux.Router
 }
 
-func setupCorsResponse(w *http.ResponseWriter, req *http.Request) {
-	(*w).Header().Set("Access-Control-Allow-Origin", "*")
-	(*w).Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
-	(*w).Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Authorization")
-}
+// func setupCorsResponse(w *http.ResponseWriter, req *http.Request) {
+// 	(*w).Header().Set("Access-Control-Allow-Origin", "*")
+// 	(*w).Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+// 	(*w).Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Authorization")
+// }
 
 func (a *App) Start() {
 	a.DB.AutoMigrate(&models.User{})
@@ -63,7 +65,7 @@ func (a *App) Start() {
 }
 
 func (a *App) getUsers(w http.ResponseWriter, r *http.Request) {
-	setupCorsResponse(&w, r)
+	cors.SetupCorsResponse(&w, r)
 	if (*r).Method == "OPTIONS" {
 		return
 	}
@@ -87,7 +89,7 @@ func (a *App) getUsers(w http.ResponseWriter, r *http.Request) {
 }
 
 func (a *App) deleteUser(w http.ResponseWriter, r *http.Request) {
-	setupCorsResponse(&w, r)
+	cors.SetupCorsResponse(&w, r)
 	if (*r).Method == "OPTIONS" {
 		return
 	}
@@ -110,7 +112,7 @@ func (a *App) deleteUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func (a *App) signupUser(w http.ResponseWriter, r *http.Request) {
-	setupCorsResponse(&w, r)
+	cors.SetupCorsResponse(&w, r)
 	if (*r).Method == "OPTIONS" {
 		return
 	}
@@ -155,7 +157,7 @@ func (a *App) signupUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func (a *App) loginUser(w http.ResponseWriter, r *http.Request) {
-	setupCorsResponse(&w, r)
+	cors.SetupCorsResponse(&w, r)
 	if (*r).Method == "OPTIONS" {
 		return
 	}
@@ -196,7 +198,7 @@ func (a *App) loginUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func (a *App) getProjects(w http.ResponseWriter, r *http.Request) {
-	setupCorsResponse(&w, r)
+	cors.SetupCorsResponse(&w, r)
 	if (*r).Method == "OPTIONS" {
 		return
 	}
@@ -220,7 +222,7 @@ func (a *App) getProjects(w http.ResponseWriter, r *http.Request) {
 }
 
 func (a *App) addProject(w http.ResponseWriter, r *http.Request) {
-	setupCorsResponse(&w, r)
+	cors.SetupCorsResponse(&w, r)
 	if (*r).Method == "OPTIONS" {
 		return
 	}
@@ -248,7 +250,7 @@ func (a *App) addProject(w http.ResponseWriter, r *http.Request) {
 }
 
 func (a *App) updateProject(w http.ResponseWriter, r *http.Request) {
-	setupCorsResponse(&w, r)
+	cors.SetupCorsResponse(&w, r)
 	if (*r).Method == "OPTIONS" {
 		return
 	}
@@ -283,7 +285,7 @@ func (a *App) updateProject(w http.ResponseWriter, r *http.Request) {
 }
 
 func (a *App) deleteProject(w http.ResponseWriter, r *http.Request) {
-	setupCorsResponse(&w, r)
+	cors.SetupCorsResponse(&w, r)
 	if (*r).Method == "OPTIONS" {
 		return
 	}
@@ -306,7 +308,7 @@ func (a *App) deleteProject(w http.ResponseWriter, r *http.Request) {
 }
 
 func (a *App) getProjectsByDepartment(w http.ResponseWriter, r *http.Request) {
-	setupCorsResponse(&w, r)
+	cors.SetupCorsResponse(&w, r)
 	if (*r).Method == "OPTIONS" {
 		return
 	}
@@ -329,7 +331,7 @@ func (a *App) getProjectsByDepartment(w http.ResponseWriter, r *http.Request) {
 }
 
 func (a *App) getProjectsBySearch(w http.ResponseWriter, r *http.Request) {
-	setupCorsResponse(&w, r)
+	cors.SetupCorsResponse(&w, r)
 	if (*r).Method == "OPTIONS" {
 		return
 	}
