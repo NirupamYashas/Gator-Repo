@@ -1,0 +1,108 @@
+.container{
+    display: flex;
+    height: 800px;
+    margin-top: 40px;
+    justify-content: center;
+    align-items: center;
+}
+
+.card{
+    display: flex;
+    padding: 20px;
+    background-color: rgba(247, 178, 17, 0.767);
+    border-radius: 10px;
+    flex-direction: column;
+    align-items: center;
+    width: 400px;
+}
+
+.page-header{
+   min-height: 100%;
+   background-image: linear-gradient(rgba(0, 0, 0, 0.527),rgba(0, 0, 0, 0.5)),url(/assets/florida-campus.jpeg);
+   background-size: cover;
+   background-repeat: no-repeat;
+   background-position: center center;
+   background-attachment: fixed;
+}
+
+.register-form{
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+    align-items: stretch;
+    width: 300px;
+}
+
+.register-form > div {
+    margin: 10px 0;
+}
+
+.register-form > button{
+    border-radius: 20px;
+}
+
+.input-row label{
+    font-size: 15px;
+}
+
+.input-group{
+    width: 100%;
+}
+
+.social-line{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+.social-line > div {
+    border-radius: 50%;
+    background-color: aliceblue;
+    margin: 10px;
+    padding: 5px;
+}
+
+.register-form > button {
+    margin-top: 20px;
+}
+
+.new_account > a{
+    /* border-radius: 20px; */
+    width: 100px;
+}
+
+
+.divider {/* minor cosmetics */
+    display: table; 
+    font-size: 15px; 
+    text-align: center; 
+    width: 75%; /* divider width */
+    margin: 20px auto;/* spacing above/below */
+}
+.divider span { display: table-cell; position: relative; }
+.divider span:first-child, .divider span:last-child {
+    width: 50%;
+    top: 13px;/* adjust vertical align */
+    -moz-background-size: 100% 2px; /* line width */
+    background-size: 100% 2px; /* line width */
+    background-position: 0 0, 0 100%;
+    background-repeat: no-repeat;
+}
+.divider span:first-child {/* color changes in here */
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(transparent), to(#000));
+    background-image: -webkit-linear-gradient(180deg, transparent, #000);
+    background-image: -moz-linear-gradient(180deg, transparent, #000);
+    background-image: -o-linear-gradient(180deg, transparent, #000);
+    background-image: linear-gradient(90deg, transparent, #000);
+}
+.divider span:nth-child(2) {
+    color: #000; padding: 0px 5px; width: auto; white-space: nowrap;
+}
+.divider span:last-child {/* color changes in here */
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#000), to(transparent));
+    background-image: -webkit-linear-gradient(180deg, #000, transparent);
+    background-image: -moz-linear-gradient(180deg, #000, transparent);
+    background-image: -o-linear-gradient(180deg, #000, transparent);
+    background-image: linear-gradient(90deg, #000, transparent);
+}
+
