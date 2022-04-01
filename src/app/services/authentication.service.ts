@@ -18,4 +18,7 @@ export class AuthenticationService {
   public get currentUserValue(): User {
       return this.currentUserSubject.value;
   }
+
+  logout() {
+  }
 }
