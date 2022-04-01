@@ -19,29 +19,6 @@ type App struct {
 	R  *mux.Router
 }
 
-// type Project struct {
-// 	ID         string `gorm:"primaryKey" json:"id"`
-// 	Name       string `json:"name"`
-// 	Department string `json:"department"`
-// 	Email      string `json:"email"`
-// 	Link       string `json:"link"`
-// }
-
-// type User struct {
-// 	ID        string `gorm:"primaryKey" json:"id"`
-// 	Firstname string `json:"firstname"`
-// 	Lastname  string `json:"lastname"`
-// 	Email     string `json:"email"`
-// 	Password  string `json:"password"`
-// 	Isadmin   bool   `json:"isadmin"`
-// }
-
-// type LoginSignupReply struct {
-// 	Userdata User   `json:"userdata"`
-// 	Message  string `json:"message"`
-// 	Allow    bool   `json:"allow"`
-// }
-
 func setupCorsResponse(w *http.ResponseWriter, req *http.Request) {
 	(*w).Header().Set("Access-Control-Allow-Origin", "*")
 	(*w).Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
@@ -72,6 +49,7 @@ func (a *App) Start() {
 	a.R.HandleFunc("/api/users/signup", a.signupUser).Methods("POST", "OPTIONS")
 	a.R.HandleFunc("/api/users/login", a.loginUser).Methods("POST", "OPTIONS")
 	a.R.HandleFunc("/api/users", a.getUsers).Methods("GET", "OPTIONS")
+	a.R.HandleFunc("/api/users/{id}", a.deleteUser).Methods("DELETE", "OPTIONS")
 
 	a.R.HandleFunc("/api/projects", a.getProjects).Methods("GET", "OPTIONS")
 	a.R.HandleFunc("/api/projects", a.addProject).Methods("POST", "OPTIONS")
@@ -107,17 +85,28 @@ func (a *App) getUsers(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// delete user function
-// func (a *App) deleteUser(w http.ResponseWriter, r *http.Request) {
-// 	setupCorsResponse(&w, r)
-// 	if (*r).Method == "OPTIONS" {
-// 		return
-// 	}
+func (a *App) deleteUser(w http.ResponseWriter, r *http.Request) {
+	setupCorsResponse(&w, r)
+	if (*r).Method == "OPTIONS" {
+		return
+	}
 
-// 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Content-Type", "application/json")
 
-// 	var user User
-// }
+	var user models.User
+	vars := mux.Vars(r)
+	id := vars["id"]
+	user.ID = id
+	err := a.DB.Table("users").Unscoped().Delete(user).Error
+
+	if err != nil {
+		json.NewEncoder(w).Encode(err.Error())
+		return
+	} else {
+		json.NewEncoder(w).Encode("User deleted")
+		return
+	}
+}
 
 func (a *App) signupUser(w http.ResponseWriter, r *http.Request) {
 	setupCorsResponse(&w, r)
@@ -300,13 +289,17 @@ func (a *App) deleteProject(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 
-	err := a.DB.Table("projects").Unscoped().Delete(&models.Project{ID: mux.Vars(r)["id"]}).Error
+	var project models.Project
+	vars := mux.Vars(r)
+	id := vars["id"]
+	project.ID = id
+	err := a.DB.Table("projects").Unscoped().Delete(project).Error
 
 	if err != nil {
 		json.NewEncoder(w).Encode(err.Error())
 		return
 	} else {
-		w.WriteHeader(http.StatusOK)
+		json.NewEncoder(w).Encode("Project deleted successfully")
 		return
 	}
 }
