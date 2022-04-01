@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import firebase from 'firebase/compat/app';
 
 import { User } from '../_models/user';
@@ -17,7 +17,7 @@ export class AuthenticationService {
 
   user$: Observable<firebase.User|null>;
 
-  constructor(private http: HttpClient,private afAuth: AngularFireAuth,private route: ActivatedRoute) {
+  constructor(private http: HttpClient,private afAuth: AngularFireAuth,private route: ActivatedRoute,public router: Router) {
     this.user$ = afAuth.authState;
   }
 
@@ -27,9 +27,11 @@ export class AuthenticationService {
 
   login() {
     this.afAuth.signInWithRedirect(new firebase.auth.GoogleAuthProvider());
+    this.router.navigateByUrl('/projects');
   }
 
   logout() {
     this.afAuth.signOut();
+    this.router.navigateByUrl('/');
   }
 }

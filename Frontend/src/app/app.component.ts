@@ -10,7 +10,6 @@ export class AppComponent {
   title = 'Gator-Repo';
 
   constructor(public location: Location){
-
   }
 
   removeNavbar() {
