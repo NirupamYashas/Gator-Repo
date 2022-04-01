@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient,HttpHeaders, HttpParams } from '@angular/common/http';
 
+import { User } from '../_models/user';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -26,5 +28,13 @@ export class UsersService {
     httpHeaders.append('content-type','application/json')
 
     return this.httpclient.post(this._loginUrl, createResource, {headers: httpHeaders});
+  }
+
+  getAll() {
+    return this.httpclient.get<User[]>('http://localhost:8080/api/users');
+  }
+
+  delete(id: number) {
+    return this.httpclient.delete('http://localhost:8080/api/users'+id);
   }
 }
