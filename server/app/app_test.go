@@ -23,7 +23,13 @@ func initApp() App {
 
 func TestGetProjects(t *testing.T) {
 	app := initApp()
-	proj := models.Project{ID: uuid.New().String(), Name: "Game Project", Department: "CISE", Email: "game@gmail.com", Link: "github.com/game"}
+	proj := models.Project{
+		ID:         uuid.New().String(),
+		Name:       "test_project",
+		Department: "test_department",
+		Email:      "test@email.com",
+		Link:       "test_link.com",
+	}
 	app.DB.Table("projects").Save(proj)
 
 	req, _ := http.NewRequest("GET", "/api/projects", nil)
