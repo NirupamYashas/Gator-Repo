@@ -4,7 +4,7 @@ import (
 	"log"
 	"net/http"
 
-	"server/models"
+	// "server/models"
 	"server/utilities"
 
 	"server/controllers/projects"
@@ -12,8 +12,11 @@ import (
 )
 
 func Start() {
-	utilities.App.DB.AutoMigrate(&models.User{})
-	utilities.App.DB.AutoMigrate(&models.Project{})
+	projects.Start()
+	users.Start()
+
+	// utilities.App.DB.AutoMigrate(&models.User{})
+	// utilities.App.DB.AutoMigrate(&models.Project{})
 
 	// var user User = User{ID: uuid.New().String(), Firstname: "Jagan", Lastname: "Dwarampudi", Email: "scientistjagan2000@gmail.com", Password: "password"}
 	// a.DB.Table("users").Create(&user)
@@ -32,17 +35,17 @@ func Start() {
 	// a.DB.Table("projects").Where("id = ?", "b69cb878-148c-462e-9c3e-f66d04033570").First(&project)
 	// a.DB.Table("projects").Delete(&project)
 
-	utilities.App.R.HandleFunc("/api/users/signup", users.SignupUser).Methods("POST", "OPTIONS")
-	utilities.App.R.HandleFunc("/api/users/login", users.LoginUser).Methods("POST", "OPTIONS")
-	utilities.App.R.HandleFunc("/api/users", users.GetUsers).Methods("GET", "OPTIONS")
-	utilities.App.R.HandleFunc("/api/users/{id}", users.DeleteUser).Methods("DELETE", "OPTIONS")
+	// utilities.App.R.HandleFunc("/api/users/signup", users.SignupUser).Methods("POST", "OPTIONS")
+	// utilities.App.R.HandleFunc("/api/users/login", users.LoginUser).Methods("POST", "OPTIONS")
+	// utilities.App.R.HandleFunc("/api/users", users.GetUsers).Methods("GET", "OPTIONS")
+	// utilities.App.R.HandleFunc("/api/users/{id}", users.DeleteUser).Methods("DELETE", "OPTIONS")
 
-	utilities.App.R.HandleFunc("/api/projects", projects.GetProjects).Methods("GET", "OPTIONS")
-	utilities.App.R.HandleFunc("/api/projects", projects.AddProject).Methods("POST", "OPTIONS")
-	utilities.App.R.HandleFunc("/api/projects/{id}", projects.UpdateProject).Methods("PUT", "OPTIONS")
-	utilities.App.R.HandleFunc("/api/projects/{id}", projects.DeleteProject).Methods("DELETE", "OPTIONS")
-	utilities.App.R.HandleFunc("/api/projects/departments/{department}", projects.GetProjectsByDepartment).Methods("GET", "OPTIONS")
-	utilities.App.R.HandleFunc("/api/projects/search/{search_phrase}", projects.GetProjectsBySearch).Methods("GET", "OPTIONS")
+	// utilities.App.R.HandleFunc("/api/projects", projects.GetProjects).Methods("GET", "OPTIONS")
+	// utilities.App.R.HandleFunc("/api/projects", projects.AddProject).Methods("POST", "OPTIONS")
+	// utilities.App.R.HandleFunc("/api/projects/{id}", projects.UpdateProject).Methods("PUT", "OPTIONS")
+	// utilities.App.R.HandleFunc("/api/projects/{id}", projects.DeleteProject).Methods("DELETE", "OPTIONS")
+	// utilities.App.R.HandleFunc("/api/projects/departments/{department}", projects.GetProjectsByDepartment).Methods("GET", "OPTIONS")
+	// utilities.App.R.HandleFunc("/api/projects/search/{search_phrase}", projects.GetProjectsBySearch).Methods("GET", "OPTIONS")
 
 	log.Fatal(http.ListenAndServe(":8080", utilities.App.R))
 }
