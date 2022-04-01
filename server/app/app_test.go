@@ -8,6 +8,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	"server/controllers/projects"
 	"server/models"
 
 	"github.com/google/uuid"
@@ -15,10 +16,10 @@ import (
 	"gorm.io/gorm"
 )
 
-func initApp() App {
+func initApp() models.App {
 	db, _ := gorm.Open(sqlite.Open("testing.db"), &gorm.Config{})
 	db.AutoMigrate(&models.Project{})
-	return App{DB: db}
+	return models.App{DB: db}
 }
 
 func TestGetProjects(t *testing.T) {
@@ -34,7 +35,7 @@ func TestGetProjects(t *testing.T) {
 
 	req, _ := http.NewRequest("GET", "/api/projects", nil)
 	r := httptest.NewRecorder()
-	handler := http.HandlerFunc(app.getProjects)
+	handler := http.HandlerFunc(projects.GetProjects)
 
 	handler.ServeHTTP(r, req)
 
@@ -54,7 +55,7 @@ func TestAddProject(t *testing.T) {
 	}`)
 	req, _ := http.NewRequest("POST", "/api/projects", rqBody)
 	r := httptest.NewRecorder()
-	handler := http.HandlerFunc(app.addProject)
+	handler := http.HandlerFunc(projects.AddProject)
 
 	handler.ServeHTTP(r, req)
 
@@ -67,7 +68,7 @@ func toReader(content string) io.Reader {
 	return bytes.NewBuffer([]byte(content))
 }
 
-func firstProject(app App) models.Project {
+func firstProject(app models.App) models.Project {
 	var all []models.Project
 	app.DB.Find(&all)
 	return all[0]
