@@ -13,6 +13,20 @@ import (
 	"gorm.io/gorm"
 )
 
+func Start() {
+	utilities.App.DB.AutoMigrate(&models.Project{})
+	addRoutes()
+}
+
+func addRoutes() {
+	utilities.App.R.HandleFunc("/api/projects", GetProjects).Methods("GET", "OPTIONS")
+	utilities.App.R.HandleFunc("/api/projects", AddProject).Methods("POST", "OPTIONS")
+	utilities.App.R.HandleFunc("/api/projects/{id}", UpdateProject).Methods("PUT", "OPTIONS")
+	utilities.App.R.HandleFunc("/api/projects/{id}", DeleteProject).Methods("DELETE", "OPTIONS")
+	utilities.App.R.HandleFunc("/api/projects/departments/{department}", GetProjectsByDepartment).Methods("GET", "OPTIONS")
+	utilities.App.R.HandleFunc("/api/projects/search/{search_phrase}", GetProjectsBySearch).Methods("GET", "OPTIONS")
+}
+
 func GetProjects(w http.ResponseWriter, r *http.Request) {
 	cors.SetupCorsResponse(&w, r)
 	if (*r).Method == "OPTIONS" {
