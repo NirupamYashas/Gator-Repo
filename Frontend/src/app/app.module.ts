@@ -6,6 +6,11 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
+import { environment } from 'src/environments/environment';
+import { AngularFireModule } from '@angular/fire/compat';
+import { AngularFireDatabaseModule } from '@angular/fire/compat/database'
+import { AngularFireAuthModule } from '@angular/fire/compat/auth';
+
 import { AppComponent } from './app.component';
 import { ProjectsComponent } from './projects/projects.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -56,7 +61,10 @@ import { ProjectPageComponent } from './project-page/project-page.component';
     BrowserAnimationsModule,
     MatListModule,
     RouterModule,
-    RouterModule.forRoot(AvailableRoutes)
+    RouterModule.forRoot(AvailableRoutes),
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireDatabaseModule,
+    AngularFireAuthModule
   ],
   providers: [
     ProjectsService
