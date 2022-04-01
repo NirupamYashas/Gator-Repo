@@ -1,21 +1,13 @@
 package app
 
 import (
-	"encoding/json"
 	"log"
 	"net/http"
-	"strings"
 
-	"server/cors"
 	"server/models"
 	"server/utilities"
 
 	"server/controllers"
-
-	"github.com/google/uuid"
-	"github.com/gorilla/mux"
-
-	"gorm.io/gorm"
 )
 
 // type App struct {
@@ -55,12 +47,12 @@ func Start() {
 	utilities.App.R.HandleFunc("/api/users", controllers.GetUsers).Methods("GET", "OPTIONS")
 	utilities.App.R.HandleFunc("/api/users/{id}", controllers.DeleteUser).Methods("DELETE", "OPTIONS")
 
-	utilities.App.R.HandleFunc("/api/projects", getProjects).Methods("GET", "OPTIONS")
-	utilities.App.R.HandleFunc("/api/projects", addProject).Methods("POST", "OPTIONS")
-	utilities.App.R.HandleFunc("/api/projects/{id}", updateProject).Methods("PUT", "OPTIONS")
-	utilities.App.R.HandleFunc("/api/projects/{id}", deleteProject).Methods("DELETE", "OPTIONS")
-	utilities.App.R.HandleFunc("/api/projects/departments/{department}", getProjectsByDepartment).Methods("GET", "OPTIONS")
-	utilities.App.R.HandleFunc("/api/projects/search/{search_phrase}", getProjectsBySearch).Methods("GET", "OPTIONS")
+	utilities.App.R.HandleFunc("/api/projects", controllers.GetProjects).Methods("GET", "OPTIONS")
+	utilities.App.R.HandleFunc("/api/projects", controllers.AddProject).Methods("POST", "OPTIONS")
+	utilities.App.R.HandleFunc("/api/projects/{id}", controllers.UpdateProject).Methods("PUT", "OPTIONS")
+	utilities.App.R.HandleFunc("/api/projects/{id}", controllers.DeleteProject).Methods("DELETE", "OPTIONS")
+	utilities.App.R.HandleFunc("/api/projects/departments/{department}", controllers.GetProjectsByDepartment).Methods("GET", "OPTIONS")
+	utilities.App.R.HandleFunc("/api/projects/search/{search_phrase}", controllers.GetProjectsBySearch).Methods("GET", "OPTIONS")
 
 	log.Fatal(http.ListenAndServe(":8080", utilities.App.R))
 }
@@ -198,166 +190,166 @@ func Start() {
 // 	}
 // }
 
-func getProjects(w http.ResponseWriter, r *http.Request) {
-	cors.SetupCorsResponse(&w, r)
-	if (*r).Method == "OPTIONS" {
-		return
-	}
+// func getProjects(w http.ResponseWriter, r *http.Request) {
+// 	cors.SetupCorsResponse(&w, r)
+// 	if (*r).Method == "OPTIONS" {
+// 		return
+// 	}
 
-	w.Header().Set("Content-Type", "application/json")
+// 	w.Header().Set("Content-Type", "application/json")
 
-	var projects []models.Project
-	err := utilities.App.DB.Table("projects").Find(&projects).Error
+// 	var projects []models.Project
+// 	err := utilities.App.DB.Table("projects").Find(&projects).Error
 
-	if err != nil {
-		json.NewEncoder(w).Encode(err.Error())
-		return
-	}
+// 	if err != nil {
+// 		json.NewEncoder(w).Encode(err.Error())
+// 		return
+// 	}
 
-	err = json.NewEncoder(w).Encode(projects)
+// 	err = json.NewEncoder(w).Encode(projects)
 
-	if err != nil {
-		json.NewEncoder(w).Encode(err.Error())
-		return
-	}
-}
+// 	if err != nil {
+// 		json.NewEncoder(w).Encode(err.Error())
+// 		return
+// 	}
+// }
 
-func addProject(w http.ResponseWriter, r *http.Request) {
-	cors.SetupCorsResponse(&w, r)
-	if (*r).Method == "OPTIONS" {
-		return
-	}
+// func addProject(w http.ResponseWriter, r *http.Request) {
+// 	cors.SetupCorsResponse(&w, r)
+// 	if (*r).Method == "OPTIONS" {
+// 		return
+// 	}
 
-	w.Header().Set("Content-Type", "application/json")
+// 	w.Header().Set("Content-Type", "application/json")
 
-	var project models.Project
-	err := json.NewDecoder(r.Body).Decode(&project)
+// 	var project models.Project
+// 	err := json.NewDecoder(r.Body).Decode(&project)
 
-	if err != nil {
-		json.NewEncoder(w).Encode(err.Error())
-		return
-	}
+// 	if err != nil {
+// 		json.NewEncoder(w).Encode(err.Error())
+// 		return
+// 	}
 
-	project.ID = uuid.New().String()
-	err = utilities.App.DB.Table("projects").Save(&project).Error
+// 	project.ID = uuid.New().String()
+// 	err = utilities.App.DB.Table("projects").Save(&project).Error
 
-	if err != nil {
-		json.NewEncoder(w).Encode(err.Error())
-		return
-	} else {
-		w.WriteHeader(http.StatusCreated)
-		return
-	}
-}
+// 	if err != nil {
+// 		json.NewEncoder(w).Encode(err.Error())
+// 		return
+// 	} else {
+// 		w.WriteHeader(http.StatusCreated)
+// 		return
+// 	}
+// }
 
-func updateProject(w http.ResponseWriter, r *http.Request) {
-	cors.SetupCorsResponse(&w, r)
-	if (*r).Method == "OPTIONS" {
-		return
-	}
+// func updateProject(w http.ResponseWriter, r *http.Request) {
+// 	cors.SetupCorsResponse(&w, r)
+// 	if (*r).Method == "OPTIONS" {
+// 		return
+// 	}
 
-	w.Header().Set("Content-Type", "application/json")
+// 	w.Header().Set("Content-Type", "application/json")
 
-	var project models.Project
-	err := json.NewDecoder(r.Body).Decode(&project)
+// 	var project models.Project
+// 	err := json.NewDecoder(r.Body).Decode(&project)
 
-	if err != nil {
-		json.NewEncoder(w).Encode(err.Error())
-		return
-	}
+// 	if err != nil {
+// 		json.NewEncoder(w).Encode(err.Error())
+// 		return
+// 	}
 
-	project.ID = mux.Vars(r)["id"]
-	err = utilities.App.DB.Table("projects").First(&project).Error
+// 	project.ID = mux.Vars(r)["id"]
+// 	err = utilities.App.DB.Table("projects").First(&project).Error
 
-	if err == gorm.ErrRecordNotFound {
-		w.WriteHeader(http.StatusNotFound)
-		return
-	} else {
-		err = utilities.App.DB.Table("projects").Save(&project).Error
+// 	if err == gorm.ErrRecordNotFound {
+// 		w.WriteHeader(http.StatusNotFound)
+// 		return
+// 	} else {
+// 		err = utilities.App.DB.Table("projects").Save(&project).Error
 
-		if err != nil {
-			json.NewEncoder(w).Encode(err.Error())
-			return
-		} else {
-			w.WriteHeader(http.StatusOK)
-			return
-		}
-	}
-}
+// 		if err != nil {
+// 			json.NewEncoder(w).Encode(err.Error())
+// 			return
+// 		} else {
+// 			w.WriteHeader(http.StatusOK)
+// 			return
+// 		}
+// 	}
+// }
 
-func deleteProject(w http.ResponseWriter, r *http.Request) {
-	cors.SetupCorsResponse(&w, r)
-	if (*r).Method == "OPTIONS" {
-		return
-	}
+// func deleteProject(w http.ResponseWriter, r *http.Request) {
+// 	cors.SetupCorsResponse(&w, r)
+// 	if (*r).Method == "OPTIONS" {
+// 		return
+// 	}
 
-	w.Header().Set("Content-Type", "application/json")
+// 	w.Header().Set("Content-Type", "application/json")
 
-	var project models.Project
-	vars := mux.Vars(r)
-	id := vars["id"]
-	project.ID = id
-	err := utilities.App.DB.Table("projects").Unscoped().Delete(project).Error
+// 	var project models.Project
+// 	vars := mux.Vars(r)
+// 	id := vars["id"]
+// 	project.ID = id
+// 	err := utilities.App.DB.Table("projects").Unscoped().Delete(project).Error
 
-	if err != nil {
-		json.NewEncoder(w).Encode(err.Error())
-		return
-	} else {
-		json.NewEncoder(w).Encode("Project deleted successfully")
-		return
-	}
-}
+// 	if err != nil {
+// 		json.NewEncoder(w).Encode(err.Error())
+// 		return
+// 	} else {
+// 		json.NewEncoder(w).Encode("Project deleted successfully")
+// 		return
+// 	}
+// }
 
-func getProjectsByDepartment(w http.ResponseWriter, r *http.Request) {
-	cors.SetupCorsResponse(&w, r)
-	if (*r).Method == "OPTIONS" {
-		return
-	}
+// func getProjectsByDepartment(w http.ResponseWriter, r *http.Request) {
+// 	cors.SetupCorsResponse(&w, r)
+// 	if (*r).Method == "OPTIONS" {
+// 		return
+// 	}
 
-	w.Header().Set("Content-Type", "application/json")
+// 	w.Header().Set("Content-Type", "application/json")
 
-	var projects []models.Project
-	err := utilities.App.DB.Table("projects").Find(&projects, "department = ?", mux.Vars(r)["department"]).Error
+// 	var projects []models.Project
+// 	err := utilities.App.DB.Table("projects").Find(&projects, "department = ?", mux.Vars(r)["department"]).Error
 
-	if err != nil {
-		json.NewEncoder(w).Encode(err.Error())
-		return
-	}
+// 	if err != nil {
+// 		json.NewEncoder(w).Encode(err.Error())
+// 		return
+// 	}
 
-	err = json.NewEncoder(w).Encode(projects)
+// 	err = json.NewEncoder(w).Encode(projects)
 
-	if err != nil {
-		json.NewEncoder(w).Encode(err.Error())
-	}
-}
+// 	if err != nil {
+// 		json.NewEncoder(w).Encode(err.Error())
+// 	}
+// }
 
-func getProjectsBySearch(w http.ResponseWriter, r *http.Request) {
-	cors.SetupCorsResponse(&w, r)
-	if (*r).Method == "OPTIONS" {
-		return
-	}
+// func getProjectsBySearch(w http.ResponseWriter, r *http.Request) {
+// 	cors.SetupCorsResponse(&w, r)
+// 	if (*r).Method == "OPTIONS" {
+// 		return
+// 	}
 
-	w.Header().Set("Content-Type", "application/json")
+// 	w.Header().Set("Content-Type", "application/json")
 
-	res := strings.Split(mux.Vars(r)["search_phrase"], " ")
-	tx := utilities.App.DB.Table("projects")
+// 	res := strings.Split(mux.Vars(r)["search_phrase"], " ")
+// 	tx := utilities.App.DB.Table("projects")
 
-	for _, element := range res {
-		search_term := "%" + element + "%"
-		tx = tx.Where("name LIKE ? OR email LIKE ?", search_term, search_term)
-	}
+// 	for _, element := range res {
+// 		search_term := "%" + element + "%"
+// 		tx = tx.Where("name LIKE ? OR email LIKE ?", search_term, search_term)
+// 	}
 
-	var projects []models.Project
-	err := tx.Find(&projects).Error
+// 	var projects []models.Project
+// 	err := tx.Find(&projects).Error
 
-	if err != nil {
-		json.NewEncoder(w).Encode(err.Error())
-		return
-	}
+// 	if err != nil {
+// 		json.NewEncoder(w).Encode(err.Error())
+// 		return
+// 	}
 
-	err = json.NewEncoder(w).Encode(projects)
+// 	err = json.NewEncoder(w).Encode(projects)
 
-	if err != nil {
-		json.NewEncoder(w).Encode(err.Error())
-	}
-}
+// 	if err != nil {
+// 		json.NewEncoder(w).Encode(err.Error())
+// 	}
+// }
