@@ -35,6 +35,6 @@ export class UsersService {
   }
 
   delete(id: number) {
-    return this.httpclient.delete('http://localhost:8080/api/users'+id);
+    return this.httpclient.delete('http://localhost:8080/api/users/'+id);
   }
 }
