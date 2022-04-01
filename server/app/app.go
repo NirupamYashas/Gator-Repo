@@ -7,7 +7,8 @@ import (
 	"server/models"
 	"server/utilities"
 
-	"server/controllers"
+	"server/controllers/projects"
+	"server/controllers/users"
 )
 
 func Start() {
@@ -31,17 +32,17 @@ func Start() {
 	// a.DB.Table("projects").Where("id = ?", "b69cb878-148c-462e-9c3e-f66d04033570").First(&project)
 	// a.DB.Table("projects").Delete(&project)
 
-	utilities.App.R.HandleFunc("/api/users/signup", controllers.SignupUser).Methods("POST", "OPTIONS")
-	utilities.App.R.HandleFunc("/api/users/login", controllers.LoginUser).Methods("POST", "OPTIONS")
-	utilities.App.R.HandleFunc("/api/users", controllers.GetUsers).Methods("GET", "OPTIONS")
-	utilities.App.R.HandleFunc("/api/users/{id}", controllers.DeleteUser).Methods("DELETE", "OPTIONS")
+	utilities.App.R.HandleFunc("/api/users/signup", users.SignupUser).Methods("POST", "OPTIONS")
+	utilities.App.R.HandleFunc("/api/users/login", users.LoginUser).Methods("POST", "OPTIONS")
+	utilities.App.R.HandleFunc("/api/users", users.GetUsers).Methods("GET", "OPTIONS")
+	utilities.App.R.HandleFunc("/api/users/{id}", users.DeleteUser).Methods("DELETE", "OPTIONS")
 
-	utilities.App.R.HandleFunc("/api/projects", controllers.GetProjects).Methods("GET", "OPTIONS")
-	utilities.App.R.HandleFunc("/api/projects", controllers.AddProject).Methods("POST", "OPTIONS")
-	utilities.App.R.HandleFunc("/api/projects/{id}", controllers.UpdateProject).Methods("PUT", "OPTIONS")
-	utilities.App.R.HandleFunc("/api/projects/{id}", controllers.DeleteProject).Methods("DELETE", "OPTIONS")
-	utilities.App.R.HandleFunc("/api/projects/departments/{department}", controllers.GetProjectsByDepartment).Methods("GET", "OPTIONS")
-	utilities.App.R.HandleFunc("/api/projects/search/{search_phrase}", controllers.GetProjectsBySearch).Methods("GET", "OPTIONS")
+	utilities.App.R.HandleFunc("/api/projects", projects.GetProjects).Methods("GET", "OPTIONS")
+	utilities.App.R.HandleFunc("/api/projects", projects.AddProject).Methods("POST", "OPTIONS")
+	utilities.App.R.HandleFunc("/api/projects/{id}", projects.UpdateProject).Methods("PUT", "OPTIONS")
+	utilities.App.R.HandleFunc("/api/projects/{id}", projects.DeleteProject).Methods("DELETE", "OPTIONS")
+	utilities.App.R.HandleFunc("/api/projects/departments/{department}", projects.GetProjectsByDepartment).Methods("GET", "OPTIONS")
+	utilities.App.R.HandleFunc("/api/projects/search/{search_phrase}", projects.GetProjectsBySearch).Methods("GET", "OPTIONS")
 
 	log.Fatal(http.ListenAndServe(":8080", utilities.App.R))
 }
