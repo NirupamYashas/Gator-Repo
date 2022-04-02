@@ -22,6 +22,8 @@ https://user-images.githubusercontent.com/45505677/161367009-88db6fb9-ab3a-4489-
 ### Backend
 - Added User Login Functionality
 - Added User Sign Up Functionality
+- Get all users Functionality
+- Delete user Functionality
 - Unit Testing Code for get Projects
 - Unit Testing Code for add Project
 - Code Restructuring
