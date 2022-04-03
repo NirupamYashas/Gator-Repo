@@ -1,5 +1,15 @@
 package models
 
+import (
+	"github.com/gorilla/mux"
+	"gorm.io/gorm"
+)
+
+type App struct {
+	DB *gorm.DB
+	R  *mux.Router
+}
+
 type Project struct {
 	ID         string `gorm:"primaryKey" json:"id"`
 	Name       string `json:"name"`
