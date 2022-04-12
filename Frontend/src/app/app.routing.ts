@@ -8,6 +8,7 @@ import {ChangeAccountSettingsComponent} from "./change-account-settings/change-a
 import {ProjectPageComponent} from "./project-page/project-page.component"
 import { AdminProjectsComponent } from "./admin/admin-projects/admin-projects.component";
 import { AuthGuard } from './_helpers/auth.guard';
+import { UserProfileComponent } from "./user-profile/user-profile.component";
 
 export const AvailableRoutes: any = [
     { path: "", component: HomepageComponent},
@@ -18,5 +19,6 @@ export const AvailableRoutes: any = [
     { path: "create", component: CreateComponent, canActivate:[AuthGuard] },
     { path: "admin/users", component: AdminUsersComponent, canActivate:[AuthGuard]},
     { path: "admin/projects", component: AdminProjectsComponent, canActivate:[AuthGuard]},
-    { path: "changeaccountsettings", component: ChangeAccountSettingsComponent, canActivate:[AuthGuard]},
+    { path: "user-profile", component: UserProfileComponent, canActivate:[AuthGuard]},
+    { path: "changeaccountsettings", component: ChangeAccountSettingsComponent, canActivate:[AuthGuard]}
 ];

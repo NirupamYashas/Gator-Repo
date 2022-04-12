@@ -35,9 +35,9 @@ Step 2: [Angular Project Setup in Visual Studio Code](https://www.youtube.com/wa
 Step 3: Arrange the files according to the file paths given below 
 - Gator-Repo
   - Frontend
-    > go to client and run "npm i" t install all npm libraries
+    > go to client and run "npm i" to install all npm libraries
     - api
-    > run the cleint using command "ng serve" to launch cleint side webite
+    > run the client using command "ng serve" to launch client side website
     - src
     > Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
@@ -48,7 +48,7 @@ Step 3: Arrange the files according to the file paths given below
     - models
     - utils
     - main.go
-    > run main.go file using "go run main.go" in termianal in the directory of server
+    > run main.go file using "go run main.go" in terminal in the directory of server
     - Users.db
 
 ## Code scaffolding

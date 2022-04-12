@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
 import { LocationStrategy, PlatformLocation, Location } from '@angular/common';
+import { AuthenticationService } from './services/authentication.service';
+import { Router } from '@angular/router';
+import { UsersService } from './services/users.service';
 
 @Component({
   selector: 'app-root',
@@ -9,7 +12,14 @@ import { LocationStrategy, PlatformLocation, Location } from '@angular/common';
 export class AppComponent {
   title = 'Gator-Repo';
 
-  constructor(public location: Location){
+  constructor(public location: Location,private userService:  UsersService, private auth: AuthenticationService, router: Router){
+    auth.user$.subscribe(user => {
+      if(user){
+
+        let returnUrl: string | any = localStorage.getItem('returnUrl');
+        router.navigateByUrl(returnUrl);
+      }
+    })
   }
 
   removeNavbar() {
