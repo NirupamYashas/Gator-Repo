@@ -175,3 +175,41 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(nil)
 	}
 }
+
+func ChangeUserDetails(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	var s1 models.User
+	var s2 models.User
+	err := json.NewDecoder(r.Body).Decode(&s1)
+	if err != nil {
+		sendErr(w, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	err = utilities.App.DB.Raw("SELECT ID,acessKey FROM user3 WHERE id = ?", s1.ID).Scan(&s2).Error
+	if err != nil {
+		sendErr(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+	if s2.ID == s1.ID {
+		err = utilities.App.DB.Exec("UPDATE user3 SET firstname = ?, lastname = ?, email = ? where ID = ?", s1.Firstname, s1.Lastname, s1.Email, s2.ID).Error
+		if err != nil {
+			sendErr(w, http.StatusInternalServerError, err.Error())
+			return
+		}
+		err = json.NewEncoder(w).Encode(s2)
+		if err != nil {
+			sendErr(w, http.StatusInternalServerError, err.Error())
+		}
+
+		//a.db.Raw("SELECT  FROM user3 WHERE acesskey = ?", username)
+		// err = a.db.Save(&s).Error
+		// if err != nil {
+		// 	sendErr(w, http.StatusInternalServerError, err.Error())
+		// }
+	}
+}
+
+func sendErr(w http.ResponseWriter, i int, s string) {
+	panic("unimplemented")
+}
