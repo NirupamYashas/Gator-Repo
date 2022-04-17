@@ -31,6 +31,7 @@ import { AlertComponent } from './alert/alert.component';
 import { AdminUsersComponent } from './admin/admin-users/admin-users.component';
 import { ChangeAccountSettingsComponent } from './change-account-settings/change-account-settings.component';
 import { ProjectPageComponent } from './project-page/project-page.component';
+import { NoAccessComponent } from './no-access/no-access.component';
 
 @NgModule({
   declarations: [
@@ -51,6 +52,7 @@ import { ProjectPageComponent } from './project-page/project-page.component';
     AdminUsersComponent,
     ChangeAccountSettingsComponent,
     ProjectPageComponent,
+    NoAccessComponent,
   ],
   imports: [
     NgbModule,
