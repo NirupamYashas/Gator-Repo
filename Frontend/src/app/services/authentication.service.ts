@@ -1,17 +1,19 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, never, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { ActivatedRoute, Router } from '@angular/router';
 import firebase from 'firebase/compat/app';
 
 import { User } from '../_models/user';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthenticationService {
+  loginMsg: string;
   private currentUserSubject: BehaviorSubject<User>;
   public currentUser: Observable<User>;
 
@@ -25,16 +27,58 @@ export class AuthenticationService {
       return this.currentUserSubject.value;
   }
 
-  login() {
+  googleLoginService() {
     let returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') || '/';
     localStorage.setItem('returnUrl',returnUrl);
 
     this.afAuth.signInWithRedirect(new firebase.auth.GoogleAuthProvider());
-    this.router.navigateByUrl('/projects');
+    // this.router.navigateByUrl('/projects');
+  }
+
+  loginService(credentials: any){
+    let returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') || '/';
+    localStorage.setItem('returnUrl',returnUrl);
+    this.http.post<any>('http://localhost:8080/api/users/login',credentials)
+    .subscribe(data => {
+        console.log(data);
+        this.loginMsg = data.message;
+        
+        if(data.allow){
+          alert(this.loginMsg);
+          this.router.navigate(['/projects']);
+        }else{
+          alert(this.loginMsg);
+          this.router.navigate(['/login']);
+        }
+      });
   }
 
   logout() {
     this.afAuth.signOut();
     this.router.navigateByUrl('/');
+  }
+
+  isLoggedIn(){
+    let jwtHelper = new JwtHelperService();
+    let token: any = localStorage.getItem('token');
+
+    if(!token){
+      return false;
+    }
+
+    let expirationdate = jwtHelper.getTokenExpirationDate(token);
+    let isExpired = jwtHelper.isTokenExpired(token);
+
+    console.log("Expiration", expirationdate);
+    console.log("isExpired", isExpired);
+    return true;
+  }
+
+  get CurrentUser(){
+    let token = localStorage.getItem('token');
+    if(!token) return null;
+
+    return new JwtHelperService().decodeToken(token);
+
   }
 }
