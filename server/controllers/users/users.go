@@ -7,9 +7,12 @@ import (
 	"server/models"
 	"server/utilities"
 
+	// "time"
+
 	"github.com/google/uuid"
 	"github.com/gorilla/mux"
 	"gorm.io/gorm"
+	// "github.com/dgrijalva/jwt-go/v4"
 )
 
 func Start() {
@@ -147,12 +150,21 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if user.ID != "" {
-		reply = models.LoginSignupReply{Message: "Success", Allow: true, Userdata: user}
+		// claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.StandardClaims{
+		// 	Issuer: user.ID,
+		// 	ExpiresAt: time.Now().Add(time.Hour * 24).Unix(),
+		// })
+
+		// token, err := claims.SignedString([]byte(utilities.SecretKey))
+
+		if err != nil {
+			reply = models.LoginSignupReply{Message: "Internal Server Error", Allow: false}
+			json.NewEncoder(w).Encode(reply)
+		}
+		reply = models.LoginSignupReply{Message: "Success", Allow: true, Userdata: user, Token: utilities.SampleToken}
 		json.NewEncoder(w).Encode(reply)
-		return
 	} else {
 		reply = models.LoginSignupReply{Message: "Invalid Credentials", Allow: false}
 		json.NewEncoder(w).Encode(reply)
-		return
 	}
 }

@@ -31,4 +31,5 @@ type LoginSignupReply struct {
 	Userdata User   `json:"userdata"`
 	Message  string `json:"message"`
 	Allow    bool   `json:"allow"`
+	Token    string `json:"token"`
 }
