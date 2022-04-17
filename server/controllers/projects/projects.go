@@ -40,14 +40,12 @@ func GetProjects(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		json.NewEncoder(w).Encode(err.Error())
-		return
 	}
 
 	err = json.NewEncoder(w).Encode(projects)
 
 	if err != nil {
 		json.NewEncoder(w).Encode(err.Error())
-		return
 	}
 }
 
@@ -64,7 +62,6 @@ func AddProject(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		json.NewEncoder(w).Encode(err.Error())
-		return
 	}
 
 	project.ID = uuid.New().String()
@@ -72,10 +69,8 @@ func AddProject(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		json.NewEncoder(w).Encode(err.Error())
-		return
 	} else {
 		w.WriteHeader(http.StatusCreated)
-		return
 	}
 }
 
@@ -92,24 +87,20 @@ func UpdateProject(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		json.NewEncoder(w).Encode(err.Error())
-		return
 	}
 
 	project.ID = mux.Vars(r)["id"]
-	err = utilities.App.DB.Table("projects").First(&project).Error
+	err = utilities.App.DB.Table("projects").Where("id = ?", project.ID).First(&project).Error
 
 	if err == gorm.ErrRecordNotFound {
 		w.WriteHeader(http.StatusNotFound)
-		return
 	} else {
 		err = utilities.App.DB.Table("projects").Save(&project).Error
 
 		if err != nil {
 			json.NewEncoder(w).Encode(err.Error())
-			return
 		} else {
 			w.WriteHeader(http.StatusOK)
-			return
 		}
 	}
 }
@@ -130,10 +121,8 @@ func DeleteProject(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		json.NewEncoder(w).Encode(err.Error())
-		return
 	} else {
 		json.NewEncoder(w).Encode("Project deleted successfully")
-		return
 	}
 }
 
@@ -150,7 +139,6 @@ func GetProjectsByDepartment(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		json.NewEncoder(w).Encode(err.Error())
-		return
 	}
 
 	err = json.NewEncoder(w).Encode(projects)
@@ -181,7 +169,6 @@ func GetProjectsBySearch(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		json.NewEncoder(w).Encode(err.Error())
-		return
 	}
 
 	err = json.NewEncoder(w).Encode(projects)
