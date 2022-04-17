@@ -56,8 +56,6 @@ export class LoginComponent implements OnInit {
 
     console.log(credentials);
 
-    console.log(this.authenticationService.CurrentUser)
-
     this.authenticationService.loginService(credentials);
     // .subscribe(result => {
     //   if(result){

@@ -13,7 +13,6 @@ import { JwtHelperService } from '@auth0/angular-jwt';
   providedIn: 'root'
 })
 export class AuthenticationService {
-  loginMsg: string;
   private currentUserSubject: BehaviorSubject<User>;
   public currentUser: Observable<User>;
 
@@ -41,14 +40,12 @@ export class AuthenticationService {
     this.http.post<any>('http://localhost:8080/api/users/login',credentials)
     .subscribe(data => {
         console.log(data);
-        this.loginMsg = data.message;
-        
-        if(data.allow){
-          alert(this.loginMsg);
+        if(data && data.token){
           localStorage.setItem('token',data.token);
-          this.router.navigate(['/projects']);
+          alert("Login Successful");
+          this.router.navigate([returnUrl || '/']);
         }else{
-          alert(this.loginMsg);
+          alert("Login Unsuccessful");
           this.router.navigate(['/login']);
         }
       });

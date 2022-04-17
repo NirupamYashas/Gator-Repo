@@ -18,13 +18,18 @@ export class AuthGuard implements CanActivate {
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+
+      if(this.authenticationService.isLoggedIn()) return true;
+
+      this.router.navigate(['/login'],{ queryParams: { returnUrl: state.url }});
+      return false;
     
-      return this.authenticationService.user$.pipe(map(user => {
-        if(user) return true;
+      // return this.authenticationService.user$.pipe(map(user => {
+      //   if(user) return true;
   
-        this.router.navigate(['/login'],{ queryParams: { returnUrl: state.url }});
-        return false;
-      }));
+      //   this.router.navigate(['/login'],{ queryParams: { returnUrl: state.url }});
+      //   return false;
+      // }));
 
     /*
     const currentUser = this.authenticationService.currentUserValue;
