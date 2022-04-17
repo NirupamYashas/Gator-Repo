@@ -33,3 +33,7 @@ type LoginSignupReply struct {
 	Allow    bool   `json:"allow"`
 	Token    string `json:"token"`
 }
+
+type JWTToken struct {
+	Token string `json:"token"`
+}

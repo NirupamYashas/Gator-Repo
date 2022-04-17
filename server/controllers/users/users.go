@@ -2,17 +2,19 @@ package users
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"server/cors"
 	"server/models"
 	"server/utilities"
-
-	// "time"
+	"time"
 
 	"github.com/google/uuid"
 	"github.com/gorilla/mux"
 	"gorm.io/gorm"
+
 	// "github.com/dgrijalva/jwt-go/v4"
+	"github.com/golang-jwt/jwt"
 )
 
 func Start() {
@@ -140,31 +142,39 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 	err = utilities.App.DB.Table("users").Where("email = ? AND password = ?", user.Email, user.Password).First(&user).Error
 
 	if err == gorm.ErrRecordNotFound {
-		reply = models.LoginSignupReply{Message: "Invalid Credentials", Allow: false}
-		json.NewEncoder(w).Encode(reply)
+		// reply = models.LoginSignupReply{Message: "Invalid Credentials", Allow: false}
+		// json.NewEncoder(w).Encode(reply)
+		json.NewEncoder(w).Encode(nil)
 		return
 	} else if err != nil {
-		reply = models.LoginSignupReply{Message: err.Error(), Allow: false}
-		json.NewEncoder(w).Encode(reply)
+		// reply = models.LoginSignupReply{Message: err.Error(), Allow: false}
+		// json.NewEncoder(w).Encode(reply)
+		json.NewEncoder(w).Encode(nil)
 		return
 	}
 
 	if user.ID != "" {
-		// claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.StandardClaims{
-		// 	Issuer: user.ID,
-		// 	ExpiresAt: time.Now().Add(time.Hour * 24).Unix(),
-		// })
+		claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+			"issuer":  user.ID,
+			"expires": time.Now().Add(time.Hour * 24).Unix(),
+			"data":    user,
+		})
 
-		// token, err := claims.SignedString([]byte(utilities.SecretKey))
+		token, err := claims.SignedString([]byte(utilities.SecretKey))
 
 		if err != nil {
-			reply = models.LoginSignupReply{Message: "Internal Server Error", Allow: false}
-			json.NewEncoder(w).Encode(reply)
+			// reply = models.LoginSignupReply{Message: "Internal Server Error", Allow: false}
+			// json.NewEncoder(w).Encode(reply)
+			json.NewEncoder(w).Encode(nil)
 		}
-		reply = models.LoginSignupReply{Message: "Success", Allow: true, Userdata: user, Token: utilities.SampleToken}
-		json.NewEncoder(w).Encode(reply)
+
+		fmt.Println(token)
+		// reply = models.LoginSignupReply{Message: "Success", Allow: true, Userdata: user, Token: token}
+		// reply = models.LoginSignupReply{Message: "Success", Allow: true, Userdata: user, Token: utilities.SampleToken}
+		json.NewEncoder(w).Encode(models.JWTToken{Token: token})
 	} else {
-		reply = models.LoginSignupReply{Message: "Invalid Credentials", Allow: false}
-		json.NewEncoder(w).Encode(reply)
+		// reply = models.LoginSignupReply{Message: "Invalid Credentials", Allow: false}
+		// json.NewEncoder(w).Encode(reply)
+		json.NewEncoder(w).Encode(nil)
 	}
 }
