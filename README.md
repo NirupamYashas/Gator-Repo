@@ -27,9 +27,29 @@ Gator Repo is a web application that can be used to maintain all the projects do
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.2.2.
 
-## Development server
+# Running the project
+Step 1: [Introduction and Environment Setup for GoLang (Windows & Mac)](https://www.youtube.com/watch?v=dgIh-VYcWYw "Introduction and Environment Setup for GoLang (Windows & Mac)")
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+Step 2: [Angular Project Setup in Visual Studio Code](https://www.youtube.com/watch?v=ZJejjL1Iev0 "Angular Project Setup in Visual Studio Code")
+
+Step 3: Arrange the files according to the file paths given below 
+- Gator-Repo
+  - Frontend
+    > go to client and run "npm i" to install all npm libraries
+    - api
+    > run the client using command "ng serve" to launch client side website
+    - src
+    > Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+
+  - Server
+    > install go
+    - bin
+    - controllers
+    - models
+    - utils
+    - main.go
+    > run main.go file using "go run main.go" in terminal in the directory of server
+    - Users.db
 
 ## Code scaffolding
 

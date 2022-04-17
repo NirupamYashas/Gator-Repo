@@ -3,7 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router,ActivatedRoute } from "@angular/router";
 import { first } from 'rxjs/operators';
-
+import * as shajs from 'sha.js'
 import { AuthenticationService } from '../services/authentication.service';
 import { AlertService } from '../services/alert.service';
 
@@ -55,6 +55,7 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.valid) {
       var email = this.loginForm.getRawValue().useremail;
       var password = this.loginForm.getRawValue().password;
+      password=shajs('shajs').update(password).digest('hex')
       console.log(email,password)
       this.http.post<any>('http://localhost:8080/api/users/login', { email: email, password: password }).subscribe(data => {
         console.log(data);

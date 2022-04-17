@@ -26,6 +26,9 @@ export class AuthenticationService {
   }
 
   login() {
+    let returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') || '/';
+    localStorage.setItem('returnUrl',returnUrl);
+
     this.afAuth.signInWithRedirect(new firebase.auth.GoogleAuthProvider());
     this.router.navigateByUrl('/projects');
   }
