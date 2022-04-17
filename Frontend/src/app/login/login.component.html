@@ -23,11 +23,11 @@
                       </div>
                   </div>
 
-                  <form class="login-form" [formGroup]="loginForm" (ngSubmit)="loginFormSubmit()">
+                  <form class="login-form" [formGroup]="loginForm" (ngSubmit)="loginFormSubmit(loginForm.value)">
 
                       <div class="input-row form-group">
                         <label>Email</label>
-                        <input type="text" class="form-control" formControlName="useremail" placeholder="Email">
+                        <input type="text" class="form-control" formControlName="email" placeholder="Email">
                         <div *ngIf="loginEmailField.touched && loginEmailField.hasError('required')" class="d-block invalid-feedback">Please
                                 provide a Email.</div>
                         <div *ngIf="loginEmailField.touched && loginEmailField.hasError('email')" class="d-block invalid-feedback">Email

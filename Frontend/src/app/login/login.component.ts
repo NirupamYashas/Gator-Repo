@@ -15,10 +15,11 @@ import { AlertService } from '../services/alert.service';
 export class LoginComponent implements OnInit {
 
   loginForm!: FormGroup;
-  loginMsg: string;
+  
   loading = false;
   submitted = false;
   returnUrl: string;
+  invalidLogin = false;
 
   constructor(
     private router: Router,
@@ -31,7 +32,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
-      useremail: new FormControl('', [Validators.required, Validators.email]),
+      email: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', [Validators.required])
     })
 
@@ -43,40 +44,30 @@ export class LoginComponent implements OnInit {
   get f() { return this.loginForm.controls; }
 
   get loginEmailField(): any {
-    return this.loginForm.get('useremail');
+    return this.loginForm.get('email');
   }
 
   get loginPasswordField(): any {
     return this.loginForm.get('password');
   }
 
-  loginFormSubmit(): void {
+  loginFormSubmit(credentials: any): void {
 
-    if (this.loginForm.valid) {
-      var email = this.loginForm.getRawValue().useremail;
-      var password = this.loginForm.getRawValue().password;
-      console.log(email,password)
-      this.http.post<any>('http://localhost:8080/api/users/login', { email: email, password: password }).subscribe(data => {
-        console.log(data);
-        this.loginMsg = data.message;
-        
-        if(data.allow){
-          alert(this.loginMsg);
-          this.router.navigate(['/projects']);
-        }else{
-          alert(this.loginMsg);
-          this.router.navigate(['/login']);
-        }
+    console.log(credentials);
 
-      });
-     
-    } else {
-      console.log('There is a problem with the login form');
-    }
+    this.authenticationService.loginService(credentials);
+    // .subscribe(result => {
+    //   if(result){
+    //     this.router.navigate(['/projects'])
+    //   }else{
+    //     this.invalidLogin = true;
+    //     console.log('There is a problem with the login form');
+    //   }
+    // })
   }
 
   googleLogin(){
-    this.authenticationService.login();
+    this.authenticationService.googleLoginService();
   }
 
   resetForm(){

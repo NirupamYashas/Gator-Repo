@@ -27,7 +27,7 @@
             <button [routerLink]="['/login']" class="btn btn-warning lr" type="submit">Login</button>
             <button [routerLink]="['/register']" class="btn btn-warning lr" type="submit">Sign-up</button>
           </ng-template>
-          <li ngbDropdown *ngIf="authenticationService.user$ | async as user;else anonymousUser" class="nav-item dropdown">
+          <li ngbDropdown *ngIf="authenticationService.user$ | async as user;else anonymousUser || authenticationService.isLoggedIn;else anonymousUser" class="nav-item dropdown">
             <a ngbDropdownToggle class="nav-link dropdown-toggle" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               {{user.displayName}}
             </a>
