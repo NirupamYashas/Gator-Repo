@@ -45,6 +45,7 @@ export class AuthenticationService {
         
         if(data.allow){
           alert(this.loginMsg);
+          localStorage.setItem('token',data.token);
           this.router.navigate(['/projects']);
         }else{
           alert(this.loginMsg);
@@ -54,7 +55,8 @@ export class AuthenticationService {
   }
 
   logout() {
-    this.afAuth.signOut();
+    localStorage.removeItem('token');
+    // this.afAuth.signOut();
     this.router.navigateByUrl('/');
   }
 
@@ -65,13 +67,10 @@ export class AuthenticationService {
     if(!token){
       return false;
     }
-
-    let expirationdate = jwtHelper.getTokenExpirationDate(token);
+    
     let isExpired = jwtHelper.isTokenExpired(token);
 
-    console.log("Expiration", expirationdate);
-    console.log("isExpired", isExpired);
-    return true;
+    return !isExpired;
   }
 
   get CurrentUser(){

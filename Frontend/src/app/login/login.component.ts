@@ -6,6 +6,7 @@ import { first } from 'rxjs/operators';
 
 import { AuthenticationService } from '../services/authentication.service';
 import { AlertService } from '../services/alert.service';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Component({
   selector: 'app-login',
@@ -54,6 +55,8 @@ export class LoginComponent implements OnInit {
   loginFormSubmit(credentials: any): void {
 
     console.log(credentials);
+
+    console.log(this.authenticationService.CurrentUser)
 
     this.authenticationService.loginService(credentials);
     // .subscribe(result => {
