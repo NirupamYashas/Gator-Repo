@@ -11,6 +11,7 @@ import { Router } from "@angular/router";
 export class NavbarComponent implements OnInit {
 
   departmentForm! : FormGroup;
+  searchForm! : FormGroup;
 
   departments: any = ['Computer Science Engineering', 'Electrical Engineering', 'Mechanical Engineering', 'Law','Arts and Sciences']
 
@@ -24,11 +25,16 @@ export class NavbarComponent implements OnInit {
       department_name: ['']
     });
 
+    this.searchForm = this.fb.group({
+      search_input: ['']
+    });
+
     this.departmentForm.get('department_name')?.valueChanges.subscribe(data => {
       variable.departmentName = data;
       // console.log(variable.departmentName);
       this.reloadComponent();
     });
+
   }
 
   onSubmit(){
@@ -44,6 +50,13 @@ export class NavbarComponent implements OnInit {
 
   displayProjects(){
     variable.departmentName = "All-Projects";
+    this.reloadComponent();
+  }
+
+  searchInput(inputValue: any){
+    console.log(inputValue.search_input);
+    variable.searchInput = inputValue.search_input;
+    variable.departmentName = "Search";
     this.reloadComponent();
   }
 

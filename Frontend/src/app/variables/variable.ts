@@ -1,3 +1,4 @@
 export const variable = {
-    departmentName : "All-Projects"
+    departmentName : "All-Projects",
+    searchInput: ""
 };

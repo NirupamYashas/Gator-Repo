@@ -18,9 +18,9 @@
             </form>
           </li>
         </ul>
-        <form class="d-flex">
-          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-          <button class="btn btn-outline-success" type="submit">Search</button>
+        <form class="d-flex" [formGroup]="searchForm">
+          <input class="form-control me-2" formControlName="search_input" type="search" placeholder="Search" aria-label="Search">
+          <button class="btn btn-outline-success" (click)="searchInput(searchForm.value)" type="submit">Search</button>
         </form>
       </div>
     </div>
