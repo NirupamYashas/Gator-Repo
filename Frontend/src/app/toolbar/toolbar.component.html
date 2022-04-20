@@ -44,7 +44,7 @@
             <a ngbDropdownToggle class="nav-link dropdown-toggle" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               {{authenticationService.CurrentUser.data.firstname}}
             </a>
-              <div ngbDropdownMenu class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+              <div ngbDropdownMenu id="user-items" class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                 <a class="dropdown-item" routerLink="/user-profile">Profile</a>
                 <a class="dropdown-item" routerLink="/projects">Projects List</a>
                 <a class="dropdown-item" routerLink="/create">Add New project</a>
