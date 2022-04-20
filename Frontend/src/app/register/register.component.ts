@@ -76,7 +76,7 @@ export class RegisterComponent implements OnInit{
   addUserSubmit(credentials: any){
 
      console.log(credentials);
-     this.usersService.addUser(credentials).subscribe(data => {})
+     this.usersService.addUser(credentials);
 
     //  var firstName = this.addUserForm.getRawValue().firstname;
     //  var lastName = this.addUserForm.getRawValue().lastname;
