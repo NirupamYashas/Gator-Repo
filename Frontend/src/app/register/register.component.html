@@ -49,7 +49,7 @@
                         <span class="text-danger" *ngIf="addUserForm.get('password')?.hasError('required') && addUserForm.get('password')?.touched">password is required</span>
                       </div>
                       
-                      <button class="btn btn-danger btn-block btn-round register" [disabled]="!addUserForm.valid">Register</button>
+                      <button class="btn btn-danger btn-block btn-round register" id="register-button" [disabled]="!addUserForm.valid">Register</button>
                       <a class="btn btn-link" (click)="resetForm()">Reset Form</a>
                   </form>
 

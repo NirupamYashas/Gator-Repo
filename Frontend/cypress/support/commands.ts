@@ -6,6 +6,7 @@
 declare namespace Cypress {
   interface Chainable<Subject = any> {
     login(email: string,password: string): typeof login;
+    register(firstname: string,lastname:string,email: string,password: string):typeof register;
   }
 }
 
@@ -16,9 +17,20 @@ function login(email: string,password: string): void {
     cy.get('[formControlName="password"]').type(password);
     cy.get('#login-button').click();
 }
+
+function register(firstname: string,lastname: string,email: string,password: string): void {
+  cy.visit('/register');
+  cy.url().should('includes','register');
+  cy.get('[formControlName="firstname"]').type(firstname);
+  cy.get('[formControlName="lastname"]').type(lastname);
+  cy.get('[formControlName="email"]').type(email);
+  cy.get('[formControlName="password"]').type(password);
+  cy.get('#register-button').click();
+}
 //
 // NOTE: You can use it like so:
 Cypress.Commands.add('login', login);
+Cypress.Commands.add('register', register);
 //
 // ***********************************************
 // This example commands.js shows you how to
