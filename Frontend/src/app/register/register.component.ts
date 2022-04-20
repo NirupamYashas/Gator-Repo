@@ -1,7 +1,7 @@
 import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup ,Validators } from '@angular/forms';
 import { UsersService } from '../services/users.service';
-import * as shajs from 'sha.js'
+// import * as shajs from 'sha.js';
 
 @Component({
   selector: 'app-register',
@@ -67,15 +67,18 @@ export class RegisterComponent implements OnInit{
     */
   }
 
-  addUserSubmit(){
-     var firstName = this.addUserForm.getRawValue().firstname;
-     var lastName = this.addUserForm.getRawValue().lastname;
-     var Email = this.addUserForm.getRawValue().email;
-     var Password = this.addUserForm.getRawValue().password;
-     Password=shajs('shajs').update(Password).digest('hex')
-     const newFormData = { firstname: firstName, lastname: lastName, email: Email , password: Password };
-     console.log(newFormData);
-     this.usersService.addUser(newFormData).subscribe(data => {})
+  addUserSubmit(credentials: any){
+
+     console.log(credentials);
+
+    //  var firstName = this.addUserForm.getRawValue().firstname;
+    //  var lastName = this.addUserForm.getRawValue().lastname;
+    //  var Email = this.addUserForm.getRawValue().email;
+    //  var Password = this.addUserForm.getRawValue().password;
+    // //  Password=shajs('shajs').update(Password).digest('hex')
+    //  const newFormData = { firstname: firstName, lastname: lastName, email: Email , password: Password };
+    //  console.log(newFormData);
+    //  this.usersService.addUser(newFormData).subscribe(data => {})
   }
 
   resetForm(){

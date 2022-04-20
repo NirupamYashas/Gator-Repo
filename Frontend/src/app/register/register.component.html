@@ -23,7 +23,7 @@
                       </div>
                   </div>
 
-                  <form [formGroup]="addUserForm" class="register-form" (ngSubmit)="addUserSubmit()">
+                  <form [formGroup]="addUserForm" class="register-form" (ngSubmit)="addUserSubmit(addUserForm.value)">
 
                       <div class="input-row form-group">
                         <label>First Name</label>
@@ -49,7 +49,7 @@
                         <span class="text-danger" *ngIf="addUserForm.get('password')?.hasError('required') && addUserForm.get('password')?.touched">password is required</span>
                       </div>
                       
-                      <button class="btn btn-danger btn-block btn-round register" (click)="addUser()" [disabled]="!addUserForm.valid" routerLink="">Register</button>
+                      <button class="btn btn-danger btn-block btn-round register" [disabled]="!addUserForm.valid">Register</button>
                       <a class="btn btn-link" (click)="resetForm()">Reset Form</a>
                   </form>
 
