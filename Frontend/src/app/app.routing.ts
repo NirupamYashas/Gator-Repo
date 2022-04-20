@@ -17,7 +17,7 @@ export const AvailableRoutes: any = [
     { path: "register", component: RegisterComponent},
     { path: "login", component: LoginComponent},
     { path: "projects", component: ProjectsComponent,canActivate:[AuthGuard]},
-    { path: "projects/project", component: ProjectPageComponent,canActivate:[AuthGuard]},
+    { path: "projects/project-page", component: ProjectPageComponent,canActivate:[AuthGuard]},
     { path: "create", component: CreateComponent, canActivate:[AuthGuard] },
     { path: "admin/users", component: AdminUsersComponent, canActivate:[AuthGuard,AdminAuthGuard]},
     { path: "admin/projects", component: AdminProjectsComponent, canActivate:[AuthGuard,AdminAuthGuard]},

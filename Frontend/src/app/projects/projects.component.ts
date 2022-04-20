@@ -1,6 +1,8 @@
 import { ProjectsService } from './projects.service';
+import { Router,ActivatedRoute } from "@angular/router";
 
 import {  Component , OnInit} from '@angular/core';
+import { Project } from '../_models/project';
 
 @Component({
     selector: 'projects',
@@ -10,7 +12,8 @@ import {  Component , OnInit} from '@angular/core';
 export class ProjectsComponent {
     title = "List Of Projects";
     
-    constructor(public service: ProjectsService){}
+    constructor(public service: ProjectsService,private router: Router,
+        private route: ActivatedRoute,){}
     
     projects: any;
     ngOnInit(): void{
@@ -18,5 +21,10 @@ export class ProjectsComponent {
         this.service.getProjects().subscribe(data => {
             this.projects = data;
         })  
+    }
+
+    editProject(project: Project) {
+        let route = '/projects/project-page';
+        this.router.navigate([route], { queryParams: { id: project.id } });
     }
 }
