@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient,HttpHeaders, HttpParams } from '@angular/common/http';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { User } from '../_models/user';
 
@@ -11,9 +12,12 @@ export class UsersService {
   private _registerUrl = "http://localhost:8080/api/users/signup";
   private _loginUrl = "http://localhost:8080/api/users/login";
 
-  constructor(private httpclient: HttpClient) { }
+  constructor(private httpclient: HttpClient,private route: ActivatedRoute) { }
 
   addUser(createResource: any){
+
+    let returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') || '/';
+    localStorage.setItem('returnUrl',returnUrl);
 
     //Headers
     const httpHeaders = new HttpHeaders();

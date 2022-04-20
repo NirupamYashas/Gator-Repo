@@ -98,8 +98,9 @@ func SignupUser(w http.ResponseWriter, r *http.Request) {
 
 	if err == gorm.ErrRecordNotFound {
 		if user.Firstname == "" || user.Lastname == "" {
-			reply = models.LoginSignupReply{Message: "Firstname and Lastname are required", Allow: false}
-			json.NewEncoder(w).Encode(reply)
+			// reply = models.LoginSignupReply{Message: "Firstname and Lastname are required", Allow: false}
+			// json.NewEncoder(w).Encode(reply)
+			json.NewEncoder(w).Encode(nil)
 			return
 		}
 
@@ -107,18 +108,36 @@ func SignupUser(w http.ResponseWriter, r *http.Request) {
 		err = utilities.App.DB.Table("users").Save(&user).Error
 
 		if err != nil {
-			reply = models.LoginSignupReply{Message: "Error in saving user", Allow: false}
-			json.NewEncoder(w).Encode(reply)
+			// reply = models.LoginSignupReply{Message: "Error in saving user", Allow: false}
+			// json.NewEncoder(w).Encode(reply)
+			json.NewEncoder(w).Encode(nil)
 			return
 		}
 
-		reply = models.LoginSignupReply{Message: "User created successfully", Allow: true, Userdata: user}
-		json.NewEncoder(w).Encode(reply)
+		claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+			"issuer":  user.ID,
+			"expires": time.Now().Add(time.Hour * 24).Unix(),
+			"data":    user,
+		})
+
+		token, err := claims.SignedString([]byte(utilities.SecretKey))
+
+		if err != nil {
+			// reply = models.LoginSignupReply{Message: "Internal Server Error", Allow: false}
+			// json.NewEncoder(w).Encode(reply)
+			json.NewEncoder(w).Encode(nil)
+		}
+
+		fmt.Println(token)
+		// reply = models.LoginSignupReply{Message: "User created successfully", Allow: true, Userdata: user}
+		// json.NewEncoder(w).Encode(reply)
+		json.NewEncoder(w).Encode(models.JWTToken{Token: token})
 		return
 	}
 
-	reply = models.LoginSignupReply{Message: "User already exists", Allow: false}
-	json.NewEncoder(w).Encode(reply)
+	// reply = models.LoginSignupReply{Message: "User already exists", Allow: false}
+	// json.NewEncoder(w).Encode(reply)
+	json.NewEncoder(w).Encode(nil)
 }
 
 func LoginUser(w http.ResponseWriter, r *http.Request) {

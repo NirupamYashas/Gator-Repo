@@ -1,6 +1,7 @@
 import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup ,Validators } from '@angular/forms';
 import { UsersService } from '../services/users.service';
+import { Router,ActivatedRoute } from "@angular/router";
 // import * as shajs from 'sha.js';
 
 @Component({
@@ -11,8 +12,10 @@ import { UsersService } from '../services/users.service';
 export class RegisterComponent implements OnInit{
 
   addUserForm! : FormGroup;
+  returnUrl: string;
 
-  constructor(public usersService: UsersService,private fb: FormBuilder) { }
+  constructor(public usersService: UsersService,private fb: FormBuilder,private router: Router,
+    private route: ActivatedRoute,) { }
 
   ngOnInit(): void {
 
@@ -32,6 +35,9 @@ export class RegisterComponent implements OnInit{
       email: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', [Validators.required])
     });
+
+    // get return url from route parameters or default to '/'
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
 
     //value changes method implementation for learning
     /*
@@ -70,6 +76,7 @@ export class RegisterComponent implements OnInit{
   addUserSubmit(credentials: any){
 
      console.log(credentials);
+     this.usersService.addUser(credentials).subscribe(data => {})
 
     //  var firstName = this.addUserForm.getRawValue().firstname;
     //  var lastName = this.addUserForm.getRawValue().lastname;
