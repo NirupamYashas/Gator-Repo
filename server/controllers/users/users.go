@@ -2,7 +2,6 @@ package users
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"server/cors"
 	"server/models"
@@ -13,7 +12,6 @@ import (
 	"github.com/gorilla/mux"
 	"gorm.io/gorm"
 
-	// "github.com/dgrijalva/jwt-go/v4"
 	"github.com/golang-jwt/jwt"
 )
 
@@ -98,8 +96,6 @@ func SignupUser(w http.ResponseWriter, r *http.Request) {
 
 	if err == gorm.ErrRecordNotFound {
 		if user.Firstname == "" || user.Lastname == "" {
-			// reply = models.LoginSignupReply{Message: "Firstname and Lastname are required", Allow: false}
-			// json.NewEncoder(w).Encode(reply)
 			json.NewEncoder(w).Encode(nil)
 			return
 		}
@@ -108,8 +104,6 @@ func SignupUser(w http.ResponseWriter, r *http.Request) {
 		err = utilities.App.DB.Table("users").Save(&user).Error
 
 		if err != nil {
-			// reply = models.LoginSignupReply{Message: "Error in saving user", Allow: false}
-			// json.NewEncoder(w).Encode(reply)
 			json.NewEncoder(w).Encode(nil)
 			return
 		}
@@ -123,20 +117,13 @@ func SignupUser(w http.ResponseWriter, r *http.Request) {
 		token, err := claims.SignedString([]byte(utilities.SecretKey))
 
 		if err != nil {
-			// reply = models.LoginSignupReply{Message: "Internal Server Error", Allow: false}
-			// json.NewEncoder(w).Encode(reply)
 			json.NewEncoder(w).Encode(nil)
 		}
 
-		fmt.Println(token)
-		// reply = models.LoginSignupReply{Message: "User created successfully", Allow: true, Userdata: user}
-		// json.NewEncoder(w).Encode(reply)
 		json.NewEncoder(w).Encode(models.JWTToken{Token: token})
 		return
 	}
 
-	// reply = models.LoginSignupReply{Message: "User already exists", Allow: false}
-	// json.NewEncoder(w).Encode(reply)
 	json.NewEncoder(w).Encode(nil)
 }
 
@@ -161,13 +148,9 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 	err = utilities.App.DB.Table("users").Where("email = ? AND password = ?", user.Email, user.Password).First(&user).Error
 
 	if err == gorm.ErrRecordNotFound {
-		// reply = models.LoginSignupReply{Message: "Invalid Credentials", Allow: false}
-		// json.NewEncoder(w).Encode(reply)
 		json.NewEncoder(w).Encode(nil)
 		return
 	} else if err != nil {
-		// reply = models.LoginSignupReply{Message: err.Error(), Allow: false}
-		// json.NewEncoder(w).Encode(reply)
 		json.NewEncoder(w).Encode(nil)
 		return
 	}
@@ -182,18 +165,11 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 		token, err := claims.SignedString([]byte(utilities.SecretKey))
 
 		if err != nil {
-			// reply = models.LoginSignupReply{Message: "Internal Server Error", Allow: false}
-			// json.NewEncoder(w).Encode(reply)
 			json.NewEncoder(w).Encode(nil)
 		}
 
-		fmt.Println(token)
-		// reply = models.LoginSignupReply{Message: "Success", Allow: true, Userdata: user, Token: token}
-		// reply = models.LoginSignupReply{Message: "Success", Allow: true, Userdata: user, Token: utilities.SampleToken}
 		json.NewEncoder(w).Encode(models.JWTToken{Token: token})
 	} else {
-		// reply = models.LoginSignupReply{Message: "Invalid Credentials", Allow: false}
-		// json.NewEncoder(w).Encode(reply)
 		json.NewEncoder(w).Encode(nil)
 	}
 }
