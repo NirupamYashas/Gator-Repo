@@ -101,6 +101,7 @@ func SignupUser(w http.ResponseWriter, r *http.Request) {
 		}
 
 		user.ID = uuid.New().String()
+		user.Created = time.Now().String()[:10]
 		err = utilities.App.DB.Table("users").Save(&user).Error
 
 		if err != nil {
