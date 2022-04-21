@@ -20,10 +20,13 @@ export class AdminAuthGuard implements CanActivate {
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
 
     let user = this.authenticationService.CurrentUser;
-    if(user && user.isadmin) return true;
-
-    this.router.navigate(['/no-access']);
-    return false;
+    console.log(user.data.email);
+    if(user && user.data.isadmin){
+      return true;
+    }else{
+      this.router.navigate(['/no-access']);
+      return false;
+    }
   }
   
 }
