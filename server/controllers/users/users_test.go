@@ -4,12 +4,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"io"
+	"net/http"
 	"net/http/httptest"
 	"testing"
 
 	"server/models"
 	"server/utilities"
 
+	"github.com/google/uuid"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
@@ -18,6 +20,31 @@ func initApp() {
 	db, _ := gorm.Open(sqlite.Open("testing.db"), &gorm.Config{})
 	db.AutoMigrate(&models.User{})
 	utilities.App = models.App{DB: db}
+}
+
+func TestGetUsers(t *testing.T) {
+	initApp()
+	user := models.User{
+		ID:        uuid.New().String(),
+		Firstname: "test_firstname",
+		Lastname:  "test_lastname",
+		Email:     "test@email.com",
+		Password:  "test_password",
+		Isadmin:   false,
+		Created:   "2000-01-01",
+	}
+	utilities.App.DB.Table("users").Save(user)
+
+	req, _ := http.NewRequest("GET", "/api/users", nil)
+	r := httptest.NewRecorder()
+	handler := http.HandlerFunc(GetUsers)
+
+	handler.ServeHTTP(r, req)
+
+	checkStatusCode(r.Code, http.StatusOK, t)
+	checkContentType(r, t)
+	checkBody(r.Body, user, t)
+	resetDB(firstUser())
 }
 
 // func TestGetProjects(t *testing.T) {
