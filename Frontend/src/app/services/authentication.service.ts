@@ -22,9 +22,9 @@ export class AuthenticationService {
     this.user$ = afAuth.authState;
   }
 
-  public get currentUserValue(): User {
-      return this.currentUserSubject.value;
-  }
+  // public get currentUserValue(): User {
+  //     return this.currentUserSubject.value;
+  // }
 
   googleLoginService() {
     let returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') || '/';
