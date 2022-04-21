@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
+	"time"
 
 	"server/models"
 	"server/utilities"
@@ -47,48 +48,25 @@ func TestGetUsers(t *testing.T) {
 	resetDB(firstUser())
 }
 
-// func TestGetProjects(t *testing.T) {
-// 	initApp()
-// 	proj := models.Project{
-// 		ID:         uuid.New().String(),
-// 		Name:       "test_project",
-// 		Department: "test_department",
-// 		Email:      "test@email.com",
-// 		Link:       "test_link.com",
-// 	}
-// 	utilities.App.DB.Table("projects").Save(proj)
+func TestAddUser(t *testing.T) {
+	initApp()
+	var rqBody = toReader(`{
+		"firstname": "test_firstname",
+		"lastname": "test_lastname",
+		"email": "test@email.com",
+		"password": "test_password"
+	}`)
+	req, _ := http.NewRequest("POST", "/api/users/signup", rqBody)
+	r := httptest.NewRecorder()
+	handler := http.HandlerFunc(SignupUser)
 
-// 	req, _ := http.NewRequest("GET", "/api/projects", nil)
-// 	r := httptest.NewRecorder()
-// 	handler := http.HandlerFunc(GetProjects)
+	handler.ServeHTTP(r, req)
 
-// 	handler.ServeHTTP(r, req)
-
-// 	checkStatusCode(r.Code, http.StatusOK, t)
-// 	checkContentType(r, t)
-// 	checkBody(r.Body, proj, t)
-// 	resetDB(firstProject(utilities.App))
-// }
-
-// func TestAddProject(t *testing.T) {
-// 	initApp()
-// 	var rqBody = toReader(`{
-// 		"name": "test_name",
-// 		"department": "test_department",
-// 		"email": "test@email.com",
-// 		"link": "test_link.com"
-// 	}`)
-// 	req, _ := http.NewRequest("POST", "/api/projects", rqBody)
-// 	r := httptest.NewRecorder()
-// 	handler := http.HandlerFunc(AddProject)
-
-// 	handler.ServeHTTP(r, req)
-
-// 	checkStatusCode(r.Code, http.StatusCreated, t)
-// 	checkContentType(r, t)
-// 	checkProperties(firstProject(utilities.App), t)
-// 	resetDB(firstProject(utilities.App))
-// }
+	checkStatusCode(r.Code, http.StatusOK, t)
+	checkContentType(r, t)
+	checkProperties(firstUser(), t)
+	resetDB(firstUser())
+}
 
 func toReader(content string) io.Reader {
 	return bytes.NewBuffer([]byte(content))
@@ -124,21 +102,27 @@ func checkBody(body *bytes.Buffer, st models.User, t *testing.T) {
 	}
 }
 
-func checkProperties(p models.User, t *testing.T) {
-	// if p.Name != "test_name" {
-	// 	t.Errorf("Name should match: got %v want %v", p.Name, "test_name")
-	// }
-	// if p.Department != "test_department" {
-	// 	t.Errorf("Department should match: got %v want %v", p.Department, "test_department")
-	// }
-	// if p.Email != "test@email.com" {
-	// 	t.Errorf("Department should match: got %v want %v", p.Email, "test@email.com")
-	// }
-	// if p.Link != "test_link.com" {
-	// 	t.Errorf("Department should match: got %v want %v", p.Link, "test_link.com")
-	// }
+func checkProperties(u models.User, t *testing.T) {
+	if u.Firstname != "test_firstname" {
+		t.Errorf("Firstname should match: got %v want %v", u.Firstname, "test_firstname")
+	}
+	if u.Lastname != "test_lastname" {
+		t.Errorf("Lastname should match: got %v want %v", u.Lastname, "test_lastname")
+	}
+	if u.Email != "test@email.com" {
+		t.Errorf("Email should match: got %v want %v", u.Email, "test@email.com")
+	}
+	if u.Password != "test_password" {
+		t.Errorf("Password should match: got %v want %v", u.Password, "test_password")
+	}
+	if u.Isadmin != false {
+		t.Errorf("Isadmin should match: got %v want %v", u.Isadmin, false)
+	}
+	if u.Created != time.Now().String()[:10] {
+		t.Errorf("Created should match: got %v want %v", u.Created, time.Now().String()[:10])
+	}
 }
 
-func resetDB(p models.User) {
-	utilities.App.DB.Table("users").Delete(&p)
+func resetDB(u models.User) {
+	utilities.App.DB.Table("users").Delete(&u)
 }
