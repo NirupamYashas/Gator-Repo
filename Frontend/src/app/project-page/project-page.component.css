@@ -1,9 +1,19 @@
 
-body {
+/* body {
     margin-top: 40px;
     min-height: 100%;
     background: #ebecf2;
+} */
+
+#project-row:hover {
+    background-color: #E8EAF6;
+    cursor: pointer;
 }
+
+.container{
+    margin-top: 100px;
+}
+
 .userProfileInfo .image {
     position: relative
 }
@@ -153,7 +163,7 @@ body {
 }
 
 .box {
-    background: #fff;
+    background: rgb(219, 216, 216);
     padding: 30px;
     margin: 0 0 24px 0
 }

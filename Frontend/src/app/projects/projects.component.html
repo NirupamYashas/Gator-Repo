@@ -10,7 +10,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let project of projects" (click)="editProject(project)">
+            <tr id="project-row" *ngFor="let project of projects" (click)="editProject(project)">
                 <td>{{project.name}}</td>
                 <td>{{project.department}}</td>
                 <td>{{project.email}}</td>
