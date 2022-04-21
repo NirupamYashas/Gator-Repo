@@ -12,9 +12,9 @@ import (
 )
 
 func Start() {
-	begin.Start()
 	projects.Start()
 	users.Start()
+	begin.Start()
 
 	log.Fatal(http.ListenAndServe(":8080", utilities.App.R))
 }
