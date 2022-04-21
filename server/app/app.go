@@ -7,11 +7,13 @@ import (
 	// "server/models"
 	"server/utilities"
 
+	"server/controllers/begin"
 	"server/controllers/projects"
 	"server/controllers/users"
 )
 
 func Start() {
+	begin.Start()
 	projects.Start()
 	users.Start()
 
