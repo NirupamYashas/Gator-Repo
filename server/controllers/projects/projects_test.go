@@ -9,20 +9,21 @@ import (
 	"testing"
 
 	"server/models"
+	"server/utilities"
 
 	"github.com/google/uuid"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
 
-func initApp() models.App {
+func initApp() {
 	db, _ := gorm.Open(sqlite.Open("testing.db"), &gorm.Config{})
 	db.AutoMigrate(&models.Project{})
-	return models.App{DB: db}
+	utilities.App = models.App{DB: db}
 }
 
 func TestGetProjects(t *testing.T) {
-	app := initApp()
+	initApp()
 	proj := models.Project{
 		ID:         uuid.New().String(),
 		Name:       "test_project",
@@ -30,7 +31,7 @@ func TestGetProjects(t *testing.T) {
 		Email:      "test@email.com",
 		Link:       "test_link.com",
 	}
-	app.DB.Table("projects").Save(proj)
+	utilities.App.DB.Table("projects").Save(proj)
 
 	req, _ := http.NewRequest("GET", "/api/projects", nil)
 	r := httptest.NewRecorder()
@@ -41,13 +42,13 @@ func TestGetProjects(t *testing.T) {
 	checkStatusCode(r.Code, http.StatusOK, t)
 	checkContentType(r, t)
 	checkBody(r.Body, proj, t)
+	resetDB(firstProject(utilities.App))
 }
 
 func TestAddProject(t *testing.T) {
-	app := initApp()
+	initApp()
 	var rqBody = toReader(`{
-		"id": "test_id", 
-		"name": "test_project", 
+		"name": "test_name", 
 		"department": "test_department", 
 		"email": "test@email.com", 
 		"link": "test_link.com"
@@ -60,7 +61,8 @@ func TestAddProject(t *testing.T) {
 
 	checkStatusCode(r.Code, http.StatusCreated, t)
 	checkContentType(r, t)
-	checkProperties(firstProject(app), t)
+	checkProperties(firstProject(utilities.App), t)
+	resetDB(firstProject(utilities.App))
 }
 
 func toReader(content string) io.Reader {
@@ -98,9 +100,6 @@ func checkBody(body *bytes.Buffer, st models.Project, t *testing.T) {
 }
 
 func checkProperties(p models.Project, t *testing.T) {
-	if p.ID != "test_id" {
-		t.Errorf("ID should match: got %v want %v", p.ID, "test_id")
-	}
 	if p.Name != "test_name" {
 		t.Errorf("Name should match: got %v want %v", p.Name, "test_name")
 	}
@@ -113,4 +112,8 @@ func checkProperties(p models.Project, t *testing.T) {
 	if p.Link != "test_link.com" {
 		t.Errorf("Department should match: got %v want %v", p.Link, "test_link.com")
 	}
+}
+
+func resetDB(p models.Project) {
+	utilities.App.DB.Table("projects").Delete(&p)
 }
