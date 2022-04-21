@@ -25,6 +25,7 @@ type User struct {
 	Email     string `gorm:"unique" json:"email"`
 	Password  string `json:"password"`
 	Isadmin   bool   `json:"isadmin"`
+	Created   string `json:"created"`
 }
 
 type LoginSignupReply struct {
