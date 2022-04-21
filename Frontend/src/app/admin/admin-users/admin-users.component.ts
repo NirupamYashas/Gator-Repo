@@ -31,7 +31,7 @@ export class AdminUsersComponent implements OnInit {
             .subscribe(() => this.loadAllUsers());
   }
 
-  private loadAllUsers() {
+  public loadAllUsers() {
     this.userService.getAll()
         .pipe(first())
         .subscribe(users => {
