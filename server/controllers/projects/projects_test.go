@@ -42,7 +42,7 @@ func TestGetProjects(t *testing.T) {
 	checkStatusCode(r.Code, http.StatusOK, t)
 	checkContentType(r, t)
 	checkBody(r.Body, proj, t)
-	resetDB(firstProject(utilities.App))
+	resetDB(firstProject())
 }
 
 func TestAddProject(t *testing.T) {
@@ -61,17 +61,17 @@ func TestAddProject(t *testing.T) {
 
 	checkStatusCode(r.Code, http.StatusCreated, t)
 	checkContentType(r, t)
-	checkProperties(firstProject(utilities.App), t)
-	resetDB(firstProject(utilities.App))
+	checkProperties(firstProject(), t)
+	resetDB(firstProject())
 }
 
 func toReader(content string) io.Reader {
 	return bytes.NewBuffer([]byte(content))
 }
 
-func firstProject(app models.App) models.Project {
+func firstProject() models.Project {
 	var all []models.Project
-	app.DB.Find(&all)
+	utilities.App.DB.Table("projects").Find(&all)
 	return all[0]
 }
 
