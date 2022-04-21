@@ -28,7 +28,8 @@
 							<td>
 								<img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="">
 								<a href="#" class="user-link">{{user.firstname}}</a>
-								<span class="user-subhead">Admin</span>
+								<span *ngIf="user.isadmin" class="user-subhead">Admin</span>
+								<span *ngIf="!user.isadmin" class="user-subhead">Member</span>
 							</td>
 							<td>
 								{{user.created}}
