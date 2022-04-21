@@ -1,7 +1,7 @@
 describe('Add New Projects Page' , ()=> {
 
     it('Should login and navigate to new projects page', ()=>{
-        cy.login('nirupamyashas@gmail.com','password');
+        cy.login('ravulapraveen31@gmai.com','password');
         cy.get('app-toolbar li').eq(4).click();
         cy.get('#user-items a').eq(2).click();
         cy.url().should('includes','create');

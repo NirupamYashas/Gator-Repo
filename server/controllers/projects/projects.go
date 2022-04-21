@@ -2,6 +2,7 @@ package projects
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"server/cors"
 	"server/models"
@@ -88,9 +89,9 @@ func UpdateProject(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		json.NewEncoder(w).Encode(err.Error())
 	}
-
-	project.ID = mux.Vars(r)["id"]
-	err = utilities.App.DB.Table("projects").Where("id = ?", project.ID).First(&project).Error
+	fmt.Println("Hi")
+	fmt.Println(mux.Vars(r)["id"])
+	err = utilities.App.DB.Table("projects").Where("id = ?", mux.Vars(r)["id"]).First(&project).Error
 
 	if err == gorm.ErrRecordNotFound {
 		w.WriteHeader(http.StatusNotFound)

@@ -65,6 +65,37 @@ func TestAddProject(t *testing.T) {
 	resetDB(firstProject())
 }
 
+// func TestUpdateProject(t *testing.T) {
+// 	initApp()
+// 	id := uuid.New().String()
+// 	proj := models.Project{
+// 		ID:         id,
+// 		Name:       "test_project",
+// 		Department: "test_department",
+// 		Email:      "test@email.com",
+// 		Link:       "test_link.com",
+// 	}
+// 	utilities.App.DB.Table("projects").Save(proj)
+
+// 	var rqBody = toReader(`{
+// 		"name": "new_test_name",
+// 		"department": "new_test_department",
+// 		"email": "new_test@email.com",
+// 		"link": "new_test_link.com"
+// 	}`)
+
+// 	req, _ := http.NewRequest("PUT", "/api/projects/"+id, rqBody)
+// 	r := httptest.NewRecorder()
+// 	handler := http.HandlerFunc(UpdateProject)
+
+// 	handler.ServeHTTP(r, req)
+
+// 	checkStatusCode(r.Code, http.StatusOK, t)
+// 	checkContentType(r, t)
+// 	checkUpdatedProperties(firstProject(), t)
+// 	resetDB(firstProject())
+// }
+
 func toReader(content string) io.Reader {
 	return bytes.NewBuffer([]byte(content))
 }
@@ -113,6 +144,21 @@ func checkProperties(p models.Project, t *testing.T) {
 		t.Errorf("Department should match: got %v want %v", p.Link, "test_link.com")
 	}
 }
+
+// func checkUpdatedProperties(p models.Project, t *testing.T) {
+// 	if p.Name != "new_test_name" {
+// 		t.Errorf("Name should match: got %v want %v", p.Name, "new_test_name")
+// 	}
+// 	if p.Department != "new_test_department" {
+// 		t.Errorf("Department should match: got %v want %v", p.Department, "new_test_department")
+// 	}
+// 	if p.Email != "new_test@email.com" {
+// 		t.Errorf("Department should match: got %v want %v", p.Email, "new_test@email.com")
+// 	}
+// 	if p.Link != "new_test_link.com" {
+// 		t.Errorf("Department should match: got %v want %v", p.Link, "new_test_link.com")
+// 	}
+// }
 
 func resetDB(p models.Project) {
 	utilities.App.DB.Table("projects").Delete(&p)
