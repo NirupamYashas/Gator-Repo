@@ -50,5 +50,6 @@ Gossip algorithm simulations:
   
 <img width="613" alt="Gossip_graph" src="https://user-images.githubusercontent.com/46889521/194989962-384573b0-88ed-452b-9bff-ef95732ef4c1.png">
 
+
 Pushsum algorithm simulations:
 <img width="613" alt="pushsum_graph" src="https://user-images.githubusercontent.com/46889521/194989985-b0958fbf-ad31-4cc9-b9f9-7cda55f13412.png">
